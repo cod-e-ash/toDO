@@ -1,0 +1,57 @@
+.card {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.card-body {
+    padding-bottom: 1%;
+    margin-bottom: 1%;
+    overflow-y: auto;
+    max-height: 25rem;
+    min-width: 10rem;
+}
+
+.card [class*="card-header-"]:not(.card-header-icon):not(.card-header-text):not(.card-header-image) {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+tr td {
+    border: 0px;
+    margin: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 2px;
+    /* white-space:pre; */
+}
+
+.strike {
+    text-decoration: line-through;
+}
+
+.modal-newheader {
+    /* background-color: #ef5350; */
+    width: 100%;
+    border-radius: 3px;
+    margin-top: -20px;
+    padding: 15px;
+    color: whitesmoke;
+    box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(244, 67, 54, 0.4);
+    background: linear-gradient(60deg, #ef5350, #e53935);
+}
+
+.modal-newheader ::placeholder {
+    color: whitesmoke;
+    opacity: 1; /* Firefox */
+}
+
+.modal .modal-newheader .form-control  {
+    color: whitesmoke;
+    opacity: 1; /* Firefox */
+}
+
+.modal .modal-newheader .form-control:focus  {
+    color: whitesmoke;
+    opacity: 1; /* Firefox */
+    background-image : linear-gradient(to top, #f0e4e4 2px, hsla(11, 55%, 72%, 0) 2px), linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px)
+}
