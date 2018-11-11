@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-md-4" *ngFor="let list of myList;let listIndex = index">
       <div class="card">
-        <div class="card-header card-header-tabs " ngClass="{{ 'card-header-' + colors[listIndex%6] }}">
+        <div class="card-header card-header-tabs " ngClass="{{ 'card-header-' + colors[(listIndex+list.lastupd.getMilliseconds())%6] }}">
           <div class="nav-tabs-navigation">
             <div class="nav-tabs-wrapper">
               <span class="nav-tabs-title font-weight-bold" >{{list.title}}</span>
@@ -32,7 +32,7 @@
                     <td>
                     </td>
                     <td>
-                        <input class="form-control no-border" type="text" placeholder="... new item" [(ngModel)]="newItem[listIndex]" (keyup)="$event.key === 'Enter'? addItemToList(listIndex): true">
+                        <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]" (keyup)="$event.key === 'Enter'? addItemToList(listIndex): true">
                     </td>
                     <td class="td-actions float-right">
                       <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemToList(listIndex)">
@@ -69,7 +69,7 @@
         </div>
         <div class="card-footer">
           <div class="stats">
-            <i class="material-icons">access_time</i> updated 4 minutes ago
+            <i class="material-icons">access_time</i> {{list.lastupd | timeAgo }}
           </div>
         </div>
       </div> 
@@ -108,7 +108,7 @@
                       <td>
                       </td>
                       <td>
-                          <input class="form-control no-border" type="text" placeholder="... new item" [(ngModel)]="newListItem" (keyup)="$event.key === 'Enter'? addItemToList(): true">
+                          <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newListItem" (keyup)="$event.key === 'Enter'? addItemToList(): true">
                       </td>
                       <td class="td-actions float-right">
                         <button type="button" rel="tooltip" title="Add" class="btn btn-info btn-link btn-sm" (click)="addItemToList()" id="newListItemBtn">

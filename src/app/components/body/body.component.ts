@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Content } from '@angular/compiler/src/render3/r3_ast';
-import { NgForm } from '@angular/forms';
-import { last } from '@angular/router/src/utils/collection';
+import {TimeAgoPipe} from 'time-ago-pipe';
 
 //import { toDoItemList } from '../../models/todoItem.model'
 //import { toDoItem } from '../../models/todoItem.model'
@@ -18,7 +16,7 @@ export class BodyComponent implements OnInit {
   public myList: any;
   public wpend: boolean[] = [];
   // public listContent: {text: string, status: boolean} = {};
-  public newList = {title: '', content:[], lastupd:new Date};
+  public newList = {title: '', content:[], lastupd : new Date()};
   public newListItem: string = '';
   public newItem: string[] = [];
 
@@ -130,7 +128,7 @@ export class BodyComponent implements OnInit {
 
     this.sortContent(-1);
     this.newList.title = '';
-  }
+}
 
   sortContent(listIndex=-1) {
       if (listIndex<0) {
