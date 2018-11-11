@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {TimeAgoPipe} from 'time-ago-pipe';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { toDoList } from '../../models/todolist.model'
+import { ToDoListService } from '../../services/todolist.service'
+import { Subscription } from 'rxjs'
 
 //import { toDoItemList } from '../../models/todoItem.model'
 //import { toDoItem } from '../../models/todoItem.model'
@@ -12,123 +14,32 @@ import {TimeAgoPipe} from 'time-ago-pipe';
 })
 export class BodyComponent implements OnInit {
 
-  public colors: string[] = ['primary','info','success','danger','warning','info'];
-  public myList: any;
-  public wpend: boolean[] = [];
-  // public listContent: {text: string, status: boolean} = {};
-  public newList = {title: '', content:[], lastupd : new Date()};
-  public newListItem: string = '';
-  public newItem: string[] = [];
+  private colors: string[] = ['primary','info','success','danger','warning','info'];
+  private myList: toDoList[];
+  private wpend: boolean[] = [];
+  private newList: toDoList = {_id:'',title: '', content:[], lastupd:new Date};
+  private newListItem: string = '';
+  private newItem: string[] = [];
+  private getListSub: Subscription;
 
-  constructor() { }
+
+  constructor(public toDoListService: ToDoListService) { }
 
   ngOnInit() {
-    this.myList = [{
-      title: 'First Item',
-      content: [{
-        text: 'First Item in the List',
-        status: false
-      },{
-        text: 'Second Item in the List',
-        status: false
-      },{
-        text: 'Third Item in the List',
-        status: false
-      },{
-        text: 'Fourth Item in the List',
-        status: true
-      },{
-        text: 'Fifth Item in the List',
-        status: false
-      },{
-        text: 'Sixth Item in the List',
-        status: true
-      }],
-      lastupd: new Date()
-    },{
-      title: 'Second List',
-      content: [{
-        text: 'First Item in the List',
-        status: false
-      },{
-        text: 'Second Item in the List',
-        status: true
-      },{
-        text: 'Third Item in the List',
-        status: true
-      }],
-      lastupd: new Date()
-    },{
-      title: 'Third Item',
-      content: [{
-        text: 'First Item in the List',
-        status: false
-      },{
-        text: 'Second Item in the List',
-        status: false
-      },{
-        text: 'Third Item in the List',
-        status: false
-      },{
-        text: 'Fourth Item in the List',
-        status: true
-      },{
-        text: 'Fifth Item in the List',
-        status: false
-      },{
-        text: '7th Item in the List',
-        status: true
-      },{
-        text: '8th Item in the List',
-        status: true
-      },{
-        text: '9th Item in the List',
-        status: false
-      },{
-        text: '10th Item in the List',
-        status: true
-      }],
-      lastupd: new Date()
-    },{
-      title: 'First Item',
-      content: [{
-        text: 'First Item in the List',
-        status: false
-      },{
-        text: 'Second Item in the List',
-        status: false
-      },{
-        text: 'Third Item in the List',
-        status: false
-      },{
-        text: 'Fourth Item in the List',
-        status: true
-      },{
-        text: 'Fifth Item in the List',
-        status: false
-      },{
-        text: 'Sixth Item in the List',
-        status: true
-      }],
-      lastupd: new Date()
-    },{
-      title: 'Second List',
-      content: [{
-        text: 'First Item in the List',
-        status: false
-      },{
-        text: 'Second Item in the List',
-        status: true
-      },{
-        text: 'Third Item in the List',
-        status: true
-      }],
-      lastupd: new Date()
-    }]
-
-    this.sortContent(-1);
+    this.myList = this.toDoListService.getList();
+    this.sortContent(-1); 
+    this.newList._id = '';
     this.newList.title = '';
-}
+
+    this.getListSub = this.toDoListService.getListSubListener()
+      .subscribe((commonList: toDoList[]) => {
+        this.myList = commonList;
+      })
+  }
+  
+  ngOnDestroy() {
+    this.getListSub.unsubscribe();
+  }
 
   sortContent(listIndex=-1) {
       if (listIndex<0) {
@@ -144,10 +55,6 @@ export class BodyComponent implements OnInit {
       }  
   }
 
-  getRandomColor(prefix: string) {
-    return (prefix + this.colors[(Math.floor(Math.random() * 10)%6)]);
-  }
-
   addItemToList(index=-1) {
     if (index<0) {
       if (this.newListItem.length > 0 && this.newList.title.length > 0) {
@@ -157,8 +64,7 @@ export class BodyComponent implements OnInit {
       }
     } else {
       if (this.newItem[index].length > 0) {
-        this.myList[index].content.unshift({text: this.newItem[index], status: false});
-        this.myList[index].lastupd = new Date;
+        this.toDoListService.addListItem(index, this.newItem[index]);
         this.newItem[index] = '';
       }
     }
@@ -170,22 +76,19 @@ export class BodyComponent implements OnInit {
       this.newList.content.splice(contentIndex,1);
       this.newList.lastupd = new Date;
     } else {
-      this.myList[listIndex].content.splice(contentIndex,1);
-      this.myList[listIndex].lastupd = new Date;
+      this.toDoListService.delListItem(listIndex, contentIndex);
     }
   }
 
-
   addList(){
-    if(this.newList.title.length > 0 || this.newList.content.length > 0) {
-      this.myList.unshift(this.newList);
-      this.newList = {title: '', content:[], lastupd:new Date};
+    if(this.newList.title.length > 0 && this.newList.content.length > 0) {
+      this.toDoListService.addList(this.newList);
+      this.newList = {_id:'',title: '', content:[], lastupd:new Date};
     }
   }
 
   delList(listIndex){
-    this.myList.splice(listIndex,1);
+    this.toDoListService.delList(listIndex);
   }
-
   
 }
