@@ -1,24 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { toDoList } from '../../models/todolist.model'
-import { ToDoListService } from '../../services/todolist.service'
-import { Subscription } from 'rxjs'
-
-//import { toDoItemList } from '../../models/todoItem.model'
-//import { toDoItem } from '../../models/todoItem.model'
-
+import { toDoList } from '../../models/todolist.model';
+import { ToDoListService } from '../../services/todolist.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-body',
   templateUrl: './body.component.html',
   styleUrls: ['./body.component.css']
 })
-export class BodyComponent implements OnInit {
+export class BodyComponent implements OnInit, OnDestroy {
 
-  private colors: string[] = ['primary','info','success','danger','warning','info'];
+  private colors: string[] = ['primary', 'info', 'success', 'danger', 'warning', 'info'];
   private myList: toDoList[];
   private wpend: boolean[] = [];
-  private newList: toDoList = {_id:'', user:'',title: '', content:[], lastupd:new Date};
-  private newListItem: string = '';
+  private newList: toDoList = {_id: '', user: '', title: '', content: [], lastupd: new Date};
+  private newListItem = '';
   private newItem: string[] = [];
   private getListSub: Subscription;
 
@@ -31,17 +27,17 @@ export class BodyComponent implements OnInit {
       .subscribe((commonList: toDoList[]) => {
         this.myList = commonList;
         this.sortContent(-1);
-      })
+      });
     this.newList._id = '';
     this.newList.title = '';
   }
-  
+
   ngOnDestroy() {
     this.getListSub.unsubscribe();
   }
 
-  sortContent(listIndex=-1) {
-      if (listIndex<0) {
+  sortContent(listIndex= -1) {
+      if (listIndex < 0) {
         this.myList.forEach(list => {
           list.content.sort(function (x, y) {
               return (y.done === !x.done) ? 0 : x ? -1 : 1;
@@ -51,11 +47,11 @@ export class BodyComponent implements OnInit {
         this.myList[listIndex].content.sort(function (x, y) {
           return (y.done === !x.done) ? 0 : x ? -1 : 1;
         });
-      }  
+      }
   }
 
-  addItemToList(index=-1) {
-    if (index<0) {
+  addItemToList(index= -1) {
+    if (index < 0) {
       if (this.newListItem.length > 0 && this.newList.title.length > 0) {
         this.newList.content.unshift({text: this.newListItem, done: false});
         this.newList.lastupd = new Date;
@@ -67,28 +63,27 @@ export class BodyComponent implements OnInit {
         this.newItem[index] = '';
       }
     }
-    
+
   }
 
   delItemInList(listIndex, contentIndex) {
-    if (listIndex<0) {
-      this.newList.content.splice(contentIndex,1);
+    if (listIndex < 0) {
+      this.newList.content.splice(contentIndex, 1);
       this.newList.lastupd = new Date;
     } else {
       this.toDoListService.delListItem(listIndex, contentIndex);
     }
   }
 
-  addList(){
-    if(this.newList.title.length > 0 && this.newList.content.length > 0) {
+  addList() {
+    if (this.newList.title.length > 0 && this.newList.content.length > 0) {
       this.newList.user = 'ashish';
       this.toDoListService.addList(this.newList);
-      this.newList = {_id:'', user: '', title: '', content:[], lastupd:new Date};
+      this.newList = {_id: '', user: '', title: '', content: [], lastupd: new Date};
     }
   }
 
-  delList(listIndex){
+  delList(listIndex) {
     this.toDoListService.delList(listIndex);
   }
-  
 }

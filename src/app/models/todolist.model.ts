@@ -1,4 +1,4 @@
-export interface toDoList{
+export interface toDoList {
     _id: string;
     user: string;
     title: string;
@@ -6,7 +6,7 @@ export interface toDoList{
     lastupd: Date;
 }
 
-export interface toDoItem{
+export interface toDoItem {
     text: string;
     done: boolean;
 }
