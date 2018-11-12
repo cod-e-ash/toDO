@@ -17,6 +17,7 @@ export class BodyComponent implements OnInit, OnDestroy {
   private newListItem = '';
   private newItem: string[] = [];
   private getListSub: Subscription;
+  private curId: string;
 
 
   constructor(public toDoListService: ToDoListService) { }
@@ -67,6 +68,7 @@ export class BodyComponent implements OnInit, OnDestroy {
   }
 
   delItemInList(listIndex, contentIndex) {
+    console.log(listIndex, contentIndex);
     if (listIndex < 0) {
       this.newList.content.splice(contentIndex, 1);
       this.newList.lastupd = new Date;
@@ -83,7 +85,7 @@ export class BodyComponent implements OnInit, OnDestroy {
     }
   }
 
-  delList(listIndex) {
-    this.toDoListService.delList(listIndex);
+  delList() {
+    this.toDoListService.delList(this.curId);
   }
 }
