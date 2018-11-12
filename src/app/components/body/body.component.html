@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid body-container">
   <div class="row justify-content-center">
     <div class="col-md-4" *ngFor="let list of myList;let listIndex = index">
       <div class="card">
@@ -41,11 +41,11 @@
                     </td>
                   </tr>
                   <ng-container *ngFor="let item of list.content; let contentIndex = index">
-                    <tr *ngIf="(wpend[listIndex] != false && item.status == false) || !wpend[listIndex]">
+                    <tr *ngIf="(wpend[listIndex] != false && item.done == false) || !wpend[listIndex]">
                       <td>
                         <div class="form-check">
                           <label class="form-check-label align-top">
-                            <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.status">
+                            <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done">
                             <span class="form-check-sign">
                               <span class="check"></span>
                             </span>
@@ -53,7 +53,7 @@
                         </div>
                       </td>
                       <td>
-                          <textarea rows="2" class="form-control no-border align-content-center" [class.strike]="item.status" [(ngModel)]="item.text" wrap="soft"></textarea>
+                          <textarea rows="2" class="form-control no-border align-content-center" [ngClass]="{'strike text-muted':item.done}" [(ngModel)]="item.text" wrap="soft"></textarea>
                       </td>
                       <td class="td-actions float-right">
                         <button type="button" class="btn btn-danger btn-link btn-sm" (click)="delItemInList(listIndex, contentIndex)">
@@ -121,7 +121,7 @@
                         <td>
                           <div class="form-check">
                             <label class="form-check-label align-top">
-                              <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.status">
+                              <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done">
                               <span class="form-check-sign">
                                 <span class="check"></span>
                               </span>

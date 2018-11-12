@@ -55,3 +55,7 @@ tr td {
     opacity: 1; /* Firefox */
     background-image : linear-gradient(to top, #f0e4e4 2px, hsla(11, 55%, 72%, 0) 2px), linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px)
 }
+
+.body-container {
+    padding-right:2rem;
+}

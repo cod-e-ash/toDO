@@ -17,7 +17,7 @@ export class BodyComponent implements OnInit {
   private colors: string[] = ['primary','info','success','danger','warning','info'];
   private myList: toDoList[];
   private wpend: boolean[] = [];
-  private newList: toDoList = {_id:'',title: '', content:[], lastupd:new Date};
+  private newList: toDoList = {_id:'', user:'',title: '', content:[], lastupd:new Date};
   private newListItem: string = '';
   private newItem: string[] = [];
   private getListSub: Subscription;
@@ -26,15 +26,14 @@ export class BodyComponent implements OnInit {
   constructor(public toDoListService: ToDoListService) { }
 
   ngOnInit() {
-    this.myList = this.toDoListService.getList();
-    this.sortContent(-1); 
-    this.newList._id = '';
-    this.newList.title = '';
-
+    this.toDoListService.getList();
     this.getListSub = this.toDoListService.getListSubListener()
       .subscribe((commonList: toDoList[]) => {
         this.myList = commonList;
+        this.sortContent(-1);
       })
+    this.newList._id = '';
+    this.newList.title = '';
   }
   
   ngOnDestroy() {
@@ -45,12 +44,12 @@ export class BodyComponent implements OnInit {
       if (listIndex<0) {
         this.myList.forEach(list => {
           list.content.sort(function (x, y) {
-              return (y.status === !x.status) ? 0 : x ? -1 : 1;
+              return (y.done === !x.done) ? 0 : x ? -1 : 1;
           });
         });
       } else {
         this.myList[listIndex].content.sort(function (x, y) {
-          return (y.status === !x.status) ? 0 : x ? -1 : 1;
+          return (y.done === !x.done) ? 0 : x ? -1 : 1;
         });
       }  
   }
@@ -58,7 +57,7 @@ export class BodyComponent implements OnInit {
   addItemToList(index=-1) {
     if (index<0) {
       if (this.newListItem.length > 0 && this.newList.title.length > 0) {
-        this.newList.content.unshift({text: this.newListItem, status: false});
+        this.newList.content.unshift({text: this.newListItem, done: false});
         this.newList.lastupd = new Date;
         this.newListItem = '';
       }
@@ -82,8 +81,9 @@ export class BodyComponent implements OnInit {
 
   addList(){
     if(this.newList.title.length > 0 && this.newList.content.length > 0) {
+      this.newList.user = 'ashish';
       this.toDoListService.addList(this.newList);
-      this.newList = {_id:'',title: '', content:[], lastupd:new Date};
+      this.newList = {_id:'', user: '', title: '', content:[], lastupd:new Date};
     }
   }
 

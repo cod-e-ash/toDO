@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { toDoList } from '../models/todolist.model';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({providedIn: 'root'})
 export class ToDoListService{
@@ -8,145 +9,42 @@ export class ToDoListService{
   private commonList: toDoList[];
   private postUpdSubject = new Subject<toDoList[]>();
 
-  constructor() {
-        this.commonList= [{
-            _id:'1',
-            title: 'First Item',
-            content: [{
-              text: 'First Item in the List',
-              status: false
-            },{
-              text: 'Second Item in the List',
-              status: false
-            },{
-              text: 'Third Item in the List',
-              status: false
-            },{
-              text: 'Fourth Item in the List',
-              status: true
-            },{
-              text: 'Fifth Item in the List',
-              status: false
-            },{
-              text: 'Sixth Item in the List',
-              status: true
-            }],
-            lastupd: new Date()
-          },{
-            _id:'2',
-            title: 'Second List',
-            content: [{
-              text: 'First Item in the List',
-              status: false
-            },{
-              text: 'Second Item in the List',
-              status: true
-            },{
-              text: 'Third Item in the List',
-              status: true
-            }],
-            lastupd: new Date()
-          },{
-            _id:'3',
-            title: 'Third Item',
-            content: [{
-              text: 'First Item in the List',
-              status: false
-            },{
-              text: 'Second Item in the List',
-              status: false
-            },{
-              text: 'Third Item in the List',
-              status: false
-            },{
-              text: 'Fourth Item in the List',
-              status: true
-            },{
-              text: 'Fifth Item in the List',
-              status: false
-            },{
-              text: '7th Item in the List',
-              status: true
-            },{
-              text: '8th Item in the List',
-              status: true
-            },{
-              text: '9th Item in the List',
-              status: false
-            },{
-              text: '10th Item in the List',
-              status: true
-            }],
-            lastupd: new Date()
-          },{
-            _id:'4',
-            title: 'First Item',
-            content: [{
-              text: 'First Item in the List',
-              status: false
-            },{
-              text: 'Second Item in the List',
-              status: false
-            },{
-              text: 'Third Item in the List',
-              status: false
-            },{
-              text: 'Fourth Item in the List',
-              status: true
-            },{
-              text: 'Fifth Item in the List',
-              status: false
-            },{
-              text: 'Sixth Item in the List',
-              status: true
-            }],
-            lastupd: new Date()
-          },{
-            _id:'6',
-            title: 'Second List',
-            content: [{
-              text: 'First Item in the List',
-              status: false
-            },{
-              text: 'Second Item in the List',
-              status: true
-            },{
-              text: 'Third Item in the List',
-              status: true
-            }],
-            lastupd: new Date()
-          }];
-    }
-    
-
+  constructor(private http: HttpClient) {}
 
     getList(){
-        return [...this.commonList];
+        this.http.get<toDoList[]>('http://localhost:3000/api/lists')
+        .subscribe((serverList) => {
+          this.commonList = serverList;
+          this.emitSubjectEvent();
+        })
     }
 
     addList(list: toDoList){
-        this.commonList.unshift(list);
-        this.emitSubject();
+        this.http.post<{message: string}>('http://localhost:3000/api/lists', list)
+        .subscribe((data) => {
+          this.commonList.unshift(list);
+          this.emitSubjectEvent();
+        });
     }
 
-    delList(index) {
-        this.commonList.splice(index,1);
-        this.emitSubject();
+    delList(listIndex) {
+        this.commonList.splice(listIndex,1);
+        this.emitSubjectEvent();
     }
 
-    addListItem(index, newItem) {
-        this.commonList[index].content.unshift({text: newItem, status: false});
-        this.commonList[index].lastupd = new Date;
-        this.emitSubject();
+    addListItem(listIndex, newItem) {
+        this.commonList[listIndex].content.unshift({text: newItem, done: false});
+        this.commonList[listIndex].lastupd = new Date;
+        this.emitSubjectEvent();
     }
 
     delListItem(listIndex, contentIndex) {
         this.commonList[listIndex].content.splice(contentIndex,1);
         this.commonList[listIndex].lastupd = new Date;
-        this.emitSubject();
+        this.emitSubjectEvent();
     }
 
-    emitSubject() {
+    emitSubjectEvent() {
       this.postUpdSubject.next([...this.commonList]);
     }
 
