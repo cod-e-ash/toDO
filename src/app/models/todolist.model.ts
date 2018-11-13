@@ -7,6 +7,7 @@ export interface toDoList {
 }
 
 export interface toDoItem {
+    _id: string;
     text: string;
     done: boolean;
 }

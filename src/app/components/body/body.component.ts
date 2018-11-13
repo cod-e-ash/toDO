@@ -13,7 +13,7 @@ export class BodyComponent implements OnInit, OnDestroy {
   private colors: string[] = ['primary', 'info', 'success', 'danger', 'warning', 'info'];
   private myList: toDoList[];
   private wpend: boolean[] = [];
-  private newList: toDoList = {_id: '', user: '', title: '', content: [], lastupd: new Date};
+  private newList: toDoList = {_id: null, user: '', title: '', content: [], lastupd: new Date};
   private newListItem = '';
   private newItem: string[] = [];
   private getListSub: Subscription;
@@ -51,29 +51,29 @@ export class BodyComponent implements OnInit, OnDestroy {
       }
   }
 
-  addItemToList(index= -1) {
+  addItemToList(listId= '', index= -1) {
     if (index < 0) {
       if (this.newListItem.length > 0 && this.newList.title.length > 0) {
-        this.newList.content.unshift({text: this.newListItem, done: false});
+        this.newList.content.unshift({_id: null, text: this.newListItem, done: false});
         this.newList.lastupd = new Date;
         this.newListItem = '';
       }
     } else {
       if (this.newItem[index].length > 0) {
-        this.toDoListService.addListItem(index, this.newItem[index]);
+        this.toDoListService.addListItem(listId, index, this.newItem[index]);
         this.newItem[index] = '';
       }
     }
 
   }
 
-  delItemInList(listIndex, contentIndex) {
+  delItemInList(listId, listIndex, contentIndex) {
     console.log(listIndex, contentIndex);
     if (listIndex < 0) {
       this.newList.content.splice(contentIndex, 1);
       this.newList.lastupd = new Date;
     } else {
-      this.toDoListService.delListItem(listIndex, contentIndex);
+      this.toDoListService.delListItem(listId, listIndex, contentIndex);
     }
   }
 
@@ -81,7 +81,7 @@ export class BodyComponent implements OnInit, OnDestroy {
     if (this.newList.title.length > 0 && this.newList.content.length > 0) {
       this.newList.user = 'ashish';
       this.toDoListService.addList(this.newList);
-      this.newList = {_id: '', user: '', title: '', content: [], lastupd: new Date};
+      this.newList = {_id: null, user: '', title: '', content: [], lastupd: new Date};
     }
   }
 
