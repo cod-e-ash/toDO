@@ -1,6 +1,7 @@
 .card {
     margin-left: 1rem;
     margin-right: 1rem;
+    min-width: 15rem !important;
 }
 
 .card-body {
@@ -8,7 +9,7 @@
     margin-bottom: 1%;
     overflow-y: auto;
     max-height: 25rem;
-    min-width: 10rem;
+    min-width: 10rem !important;
 }
 
 .card [class*="card-header-"]:not(.card-header-icon):not(.card-header-text):not(.card-header-image) {
@@ -58,4 +59,8 @@ tr td {
 
 .body-container {
     padding-right:2rem;
+}
+
+.form-check .form-check-sign .check {
+    margin-bottom: -0.6rem;
 }

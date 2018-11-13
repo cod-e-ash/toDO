@@ -18,7 +18,7 @@ export class BodyComponent implements OnInit, OnDestroy {
   private newItem: string[] = [];
   private getListSub: Subscription;
   private curId: string;
-
+  private curIndex = -1;
 
   constructor(public toDoListService: ToDoListService) { }
 
@@ -51,29 +51,28 @@ export class BodyComponent implements OnInit, OnDestroy {
       }
   }
 
-  addItemToList(listId= '', index= -1) {
-    if (index < 0) {
+  addItemToList(listIndex= -1, listId= '') {
+    if (listIndex < 0) {
       if (this.newListItem.length > 0 && this.newList.title.length > 0) {
         this.newList.content.unshift({_id: null, text: this.newListItem, done: false});
         this.newList.lastupd = new Date;
         this.newListItem = '';
       }
     } else {
-      if (this.newItem[index].length > 0) {
-        this.toDoListService.addListItem(listId, index, this.newItem[index]);
-        this.newItem[index] = '';
+      if (this.newItem[listIndex].length > -1) {
+        this.toDoListService.addListItem(listIndex, listId, this.newItem[listIndex]);
+        this.newItem[listIndex] = '';
       }
     }
 
   }
 
-  delItemInList(listId, listIndex, contentIndex) {
-    console.log(listIndex, contentIndex);
+  delItemInList(listIndex, listId, contentIndex) {
     if (listIndex < 0) {
       this.newList.content.splice(contentIndex, 1);
       this.newList.lastupd = new Date;
     } else {
-      this.toDoListService.delListItem(listId, listIndex, contentIndex);
+      this.toDoListService.delListItem(listIndex, listId, contentIndex);
     }
   }
 
@@ -85,7 +84,14 @@ export class BodyComponent implements OnInit, OnDestroy {
     }
   }
 
+  setDelItem(listIndex, listId) {
+    this.curIndex = listIndex;
+    this.curId = listId;
+  }
+
   delList() {
-    this.toDoListService.delList(this.curId);
+    this.toDoListService.delList(this.curIndex, this.curId);
+    this.curIndex = -1;
+    this.curId = '';
   }
 }

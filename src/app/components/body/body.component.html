@@ -14,7 +14,7 @@
                   </a>
                 </li>
                 <li class="nav-item" rel="tooltip" title="Delete">
-                  <a class="nav-link" href="#" data-toggle="modal" (click)="curId=list._id" data-target="#confirm-delete">
+                  <a class="nav-link" href="#" data-toggle="modal" (click)="setDelItem(listIndex, list._id)" data-target="#confirm-delete">
                     <i class="material-icons">delete</i>
                     <div class="ripple-container"></div>
                   </a>
@@ -32,10 +32,10 @@
                     <td>
                     </td>
                     <td>
-                        <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]" (keyup)="$event.key === 'Enter'? addItemToList(list._id, listIndex): true">
+                        <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]" (keyup)="$event.key === 'Enter'? addItemToList(listIndex, list._id): true">
                     </td>
                     <td class="td-actions float-right">
-                      <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemToList(list._id, listIndex)">
+                      <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemToList(listIndex, list._id)">
                         <i class="material-icons">add</i>
                       </button>
                     </td>
@@ -56,7 +56,7 @@
                           <textarea rows="2" class="form-control no-border align-content-center" [ngClass]="{'strike text-muted':item.done}" [(ngModel)]="item.text" wrap="soft"></textarea>
                       </td>
                       <td class="td-actions float-right">
-                        <button type="button" class="btn btn-danger btn-link btn-sm" (click)="delItemInList(list._id, listIndex, contentIndex)">
+                        <button type="button" class="btn btn-danger btn-link btn-sm" (click)="delItemInList(listIndex, list._id, contentIndex)">
                           <i class="material-icons">close</i>
                         </button>
                       </td>
@@ -86,7 +86,7 @@
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-round" data-dismiss="modal" >Cancel</button>
-              <a class="btn btn-danger btn-round" (click)="delList(listIndex)" data-dismiss="modal">Delete
+              <a class="btn btn-danger btn-round" (click)="delList()" data-dismiss="modal">Delete
                 <div class="ripple-container"></div>
               </a>
           </div>
