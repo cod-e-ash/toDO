@@ -51,7 +51,7 @@ export class BodyComponent implements OnInit, OnDestroy {
       }
   }
 
-  addItemToList(listIndex= -1, listId= '') {
+  addItemInList(listIndex= -1, listId= '') {
     if (listIndex < 0) {
       if (this.newListItem.length > 0 && this.newList.title.length > 0) {
         this.newList.content.unshift({_id: null, text: this.newListItem, done: false});
@@ -59,12 +59,17 @@ export class BodyComponent implements OnInit, OnDestroy {
         this.newListItem = '';
       }
     } else {
-      if (this.newItem[listIndex].length > -1) {
+      if (this.newItem[listIndex] && this.newItem[listIndex].length > -1) {
         this.toDoListService.addListItem(listIndex, listId, this.newItem[listIndex]);
         this.newItem[listIndex] = '';
       }
     }
+  }
 
+  updItemInList(listIndex= -1, listId= '', contentIndex) {
+    if (listIndex > -1) {
+        this.toDoListService.updListItem(listIndex, listId, contentIndex, this.myList[listIndex].content[contentIndex]);
+      }
   }
 
   delItemInList(listIndex, listId, contentIndex) {
@@ -72,7 +77,7 @@ export class BodyComponent implements OnInit, OnDestroy {
       this.newList.content.splice(contentIndex, 1);
       this.newList.lastupd = new Date;
     } else {
-      this.toDoListService.delListItem(listIndex, listId, contentIndex);
+      this.toDoListService.delListItem(listIndex, listId, contentIndex, this.myList[listIndex].content[contentIndex]._id);
     }
   }
 
@@ -84,7 +89,11 @@ export class BodyComponent implements OnInit, OnDestroy {
     }
   }
 
-  setDelItem(listIndex, listId) {
+  newListReset() {
+    this.newList = {_id: null, user: '', title: '', content: [], lastupd: new Date};
+  }
+
+  setCurItem(listIndex, listId) {
     this.curIndex = listIndex;
     this.curId = listId;
   }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { toDoList } from '../models/todolist.model';
 import { Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 
 @Injectable({providedIn: 'root'})
 export class ToDoListService {
@@ -23,7 +23,7 @@ export class ToDoListService {
         this.http.post<{rspData: string}>('http://localhost:3000/api/lists', list)
         .subscribe((rspData) => {
                 this.commonList.unshift(list);
-                this.emitSubjectEvent();
+                // this.emitSubjectEvent();
         });
     }
 
@@ -31,37 +31,42 @@ export class ToDoListService {
         this.http.delete('http://localhost:3000/api/lists/' + listId)
         .subscribe((rspData) => {
                 this.commonList.splice(listIndex, 1);
-                this.emitSubjectEvent();
+                // this.emitSubjectEvent();
         });
     }
 
     addListItem(listIndex, listId, newItem) {
-        this.commonList[listIndex].content.unshift({_id: null, text: newItem, done: false});
-        this.commonList[listIndex].lastupd = new Date;
-        this.http.put<{message: string}>('http://localhost:3000/api/lists/' + listId, this.commonList[listIndex])
+        this.http.put<{message: string}>('http://localhost:3000/api/items/' + listId, newItem)
         .subscribe((rspData) => {
-                if (rspData.message !== 'success') {
-                    this.commonList[listIndex].content.shift();
+                if (rspData.message === 'success') {
+                    this.commonList[listIndex].content.unshift({_id: null, text: newItem, done: false});
+                    this.commonList[listIndex].lastupd = new Date;
                 }
-                this.emitSubjectEvent();
         });
     }
 
-    delListItem(listIndex, listId, contentIndex) {
-        const oldList = this.commonList[listIndex];
-        this.commonList[listIndex].content.splice(contentIndex, 1);
-        this.commonList[listIndex].lastupd = new Date;
-        this.http.put<{message: string}>('http://localhost:3000/api/lists/' + listId, this.commonList[listIndex])
+    updListItem(listIndex, listId, contentIndex, updItem) {
+        this.http.patch<{message: string}>('http://localhost:3000/api/items/' + listId, updItem)
         .subscribe((rspData) => {
-                if (rspData.message !== 'success') {
-                    this.commonList[listIndex] = oldList;
+                if (rspData.message === 'success') {
+                    this.commonList[listIndex].content[contentIndex] = updItem;
+                    this.commonList[listIndex].lastupd = new Date;
                 }
-                this.emitSubjectEvent();
+        });
+    }
+
+    delListItem(listIndex, listId, contentIndex, contentId) {
+        this.http.delete<{message: string}>('http://localhost:3000/api/items/' + listId + '/' + contentId)
+        .subscribe((rspData) => {
+                if (rspData.message === 'success') {
+                    this.commonList[listIndex].content.splice(contentIndex, 1);
+                    this.commonList[listIndex].lastupd = new Date;
+                }
         });
     }
 
     emitSubjectEvent() {
-      this.postUpdSubject.next([...this.commonList]);
+      this.postUpdSubject.next(this.commonList);
     }
 
     getListSubListener() {

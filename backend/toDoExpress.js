@@ -24,7 +24,7 @@ toDoExpApp.use(bodyParser.urlencoded({extended: false}));
 toDoExpApp.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin','*');
     res.setHeader('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-Type, Accept');
-    res.setHeader('Access-Control-Allow-Methods','GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods','GET, POST, PUT, PATCH, DELETE, OPTIONS');
     next();
 });
 
@@ -47,7 +47,7 @@ toDoExpApp.post("/api/lists", (req, res, next) => {
 });
 
 toDoExpApp.get('/api/lists',(req, res, next) => {
-    ToDoList.find()
+    ToDoList.find().sort({'lastupd':-1})
     .then(documents => {
       res.json(documents);
     });
@@ -60,22 +60,27 @@ toDoExpApp.delete('/api/lists/:id',(req, res, next) => {
   });
 });
 
-toDoExpApp.put('/api/lists/:id',(req, res, next) => {
-  req.body.content.forEach(item => {
-    if( item._id === null ) {
-      item._id = mongoose.Types.ObjectId();
-    }
-  });
-  const list = new ToDoList({
-    _id : req.body._id,
-    title : req.body.title,
-    user : req.body.user,
-    content : req.body.content,
-    lastupd: req.body.lastupd
-  });
-  list.markModified('content');
-  ToDoList.updateOne({_id: req.params.id}, list)
+toDoExpApp.patch('/api/items/:id',(req, res, next) => {
+  if (req.body._id === null) {
+    req.body.item._id = mongoose.Types.ObjectId();
+  };
+
+  // list.markModified('content');
+  ToDoList.updateOne({'_id': req.params.id, 'content._id': req.body._id}, {'$set': 
+  {
+    'content.$._id': req.body._id, 
+    'content.$.text': req.body.text,
+    'content.$.done': req.body.done
+  }}, {upsert: true})
   .then(result => {
+    res.status(200).json({message: 'success'});
+  });
+});
+
+toDoExpApp.delete('/api/items/:listId/:contentId', (req, res, next) => {
+  // list.markModified('content');
+  ToDoList.updateOne({'_id': req.params.listId}, {$pull: {'content': {'_id': req.params.contentId}}})
+  .then((result) => {
     res.status(200).json({message: 'success'});
   });
 });

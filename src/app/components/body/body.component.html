@@ -14,7 +14,7 @@
                   </a>
                 </li>
                 <li class="nav-item" rel="tooltip" title="Delete">
-                  <a class="nav-link" href="#" data-toggle="modal" (click)="setDelItem(listIndex, list._id)" data-target="#confirm-delete">
+                  <a class="nav-link" href="#" data-toggle="modal" (click)="setCurItem(listIndex, list._id)" data-target="#confirm-delete">
                     <i class="material-icons">delete</i>
                     <div class="ripple-container"></div>
                   </a>
@@ -32,10 +32,10 @@
                     <td>
                     </td>
                     <td>
-                        <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]" (keyup)="$event.key === 'Enter'? addItemToList(listIndex, list._id): true">
+                        <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]" (keyup)="$event.key === 'Enter'? addItemInList(listIndex, list._id): true">
                     </td>
                     <td class="td-actions float-right">
-                      <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemToList(listIndex, list._id)">
+                      <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemInList(listIndex, list._id)">
                         <i class="material-icons">add</i>
                       </button>
                     </td>
@@ -45,7 +45,7 @@
                       <td>
                         <div class="form-check">
                           <label class="form-check-label align-top">
-                            <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done">
+                            <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done" (ngModelChange)="updItemInList(listIndex, list._id, contentIndex)">
                             <span class="form-check-sign">
                               <span class="check"></span>
                             </span>
@@ -53,7 +53,7 @@
                         </div>
                       </td>
                       <td>
-                          <textarea rows="2" class="form-control no-border align-content-center" [ngClass]="{'strike text-muted':item.done}" [(ngModel)]="item.text" wrap="soft"></textarea>
+                          <textarea rows="2" class="form-control no-border align-content-center" [ngClass]="{'strike text-muted':item.done}" [(ngModel)]="item.text" wrap="soft" (focus)="oldText = item.text" (focusout)="oldText !== item.text && updItemInList(listIndex, list._id, contentIndex)"></textarea>
                       </td>
                       <td class="td-actions float-right">
                         <button type="button" class="btn btn-danger btn-link btn-sm" (click)="delItemInList(listIndex, list._id, contentIndex)">
@@ -108,10 +108,10 @@
                       <td>
                       </td>
                       <td>
-                          <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newListItem" (keyup)="$event.key === 'Enter'? addItemToList(): true">
+                          <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newListItem" (keyup)="$event.key === 'Enter'? addItemInList(): true">
                       </td>
                       <td class="td-actions float-right">
-                        <button type="button" rel="tooltip" title="Add" class="btn btn-info btn-link btn-sm" (click)="addItemToList()" id="newListItemBtn">
+                        <button type="button" rel="tooltip" title="Add" class="btn btn-info btn-link btn-sm" (click)="addItemInList()" id="newListItemBtn">
                           <i class="material-icons">add</i>
                         </button>
                       </td>
@@ -143,7 +143,7 @@
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-round" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-info btn-round" (click)="addList()" data-dismiss="modal">Save</button>
+              <button type="button" class="btn btn-info btn-round" (click)="addList()" data-dismiss="modal">Save</button>  
           </div>
       </div>
   </div>
