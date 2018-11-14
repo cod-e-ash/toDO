@@ -5,7 +5,7 @@
         <div class="card-header card-header-tabs " ngClass="{{ 'card-header-' + colors[(listIndex+list.title.substring(-1,1).charCodeAt(0)*list.title.substring(0,1).charCodeAt(0))%6] }}">
           <div class="nav-tabs-navigation">
             <div class="nav-tabs-wrapper">
-              <span class="nav-tabs-title font-weight-bold" >{{list.title}}</span>
+              <span class="nav-tabs-title font-weight-bold">{{list.title}}</span>
               <ul class="nav nav-tabs float-right" data-tabs="tabs">
                 <li class="nav-item" rel="tooltip" title="Toggle Pending">
                   <a class="nav-link" href="#" data-toggle="tab" (click)="wpend[listIndex]=!wpend[listIndex]">
@@ -14,7 +14,8 @@
                   </a>
                 </li>
                 <li class="nav-item" rel="tooltip" title="Delete">
-                  <a class="nav-link" href="#" data-toggle="modal" (click)="setCurItem(listIndex, list._id)" data-target="#confirm-delete">
+                  <a class="nav-link" href="#" data-toggle="modal" (click)="setCurItem(listIndex, list._id)"
+                    data-target="#confirm-delete">
                     <i class="material-icons">delete</i>
                     <div class="ripple-container"></div>
                   </a>
@@ -25,14 +26,15 @@
         </div>
         <div class="card-body">
           <div class="tab-content">
-            <div class="tab-pane active" id="profile" >
+            <div class="tab-pane active" id="profile">
               <table class="table table-sm">
                 <tbody>
                   <tr>
                     <td>
                     </td>
                     <td>
-                        <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]" (keyup)="$event.key === 'Enter'? addItemInList(listIndex, list._id): true">
+                      <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]"
+                        (keyup)="$event.key === 'Enter'? addItemInList(listIndex, list._id): true">
                     </td>
                     <td class="td-actions float-right">
                       <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemInList(listIndex, list._id)">
@@ -45,7 +47,8 @@
                       <td>
                         <div class="form-check">
                           <label class="form-check-label align-top">
-                            <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done" (ngModelChange)="updItemInList(listIndex, list._id, contentIndex)">
+                            <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done"
+                              (ngModelChange)="updItemInList(listIndex, list._id, contentIndex)">
                             <span class="form-check-sign">
                               <span class="check"></span>
                             </span>
@@ -53,7 +56,8 @@
                         </div>
                       </td>
                       <td>
-                          <textarea rows="2" class="form-control no-border align-content-center" [ngClass]="{'strike text-muted':item.done}" [(ngModel)]="item.text" wrap="soft" (focus)="oldText = item.text" (focusout)="oldText !== item.text && updItemInList(listIndex, list._id, contentIndex)"></textarea>
+                        <textarea rows="2" class="form-control no-border align-content-center" [ngClass]="{'strike text-muted':item.done}"
+                          [(ngModel)]="item.text" wrap="soft" (focus)="oldText = item.text" (focusout)="oldText !== item.text && updItemInList(listIndex, list._id, contentIndex)"></textarea>
                       </td>
                       <td class="td-actions float-right">
                         <button type="button" class="btn btn-danger btn-link btn-sm" (click)="delItemInList(listIndex, list._id, contentIndex)">
@@ -72,7 +76,7 @@
             <i class="material-icons">access_time</i> {{list.lastupd | timeAgo }}
           </div>
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 </div>
@@ -80,71 +84,73 @@
 <!-- DELETE CONFIRM MODEL -->
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              Are you sure you want to delete?
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-round" data-dismiss="modal" >Cancel</button>
-              <a class="btn btn-danger btn-round" (click)="delList()" data-dismiss="modal">Delete
-                <div class="ripple-container"></div>
-              </a>
-          </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        Are you sure you want to delete?
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-round" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-danger btn-round" (click)="delList()" data-dismiss="modal">Delete
+          <div class="ripple-container"></div>
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- NEW LIST MODAL -->
 <div class="modal fade" id="new-list" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-newheader col-md-11">
-              <input class="form-control no-border" placeholder="Title..." type="text" [(ngModel)]="newList.title">
-          </div>
-          <div class="modal-body">
-              <table class="table table-sm">
-                <tbody>
-                    <tr>
-                      <td>
-                      </td>
-                      <td>
-                          <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newListItem" (keyup)="$event.key === 'Enter'? addItemInList(): true">
-                      </td>
-                      <td class="td-actions float-right">
-                        <button type="button" rel="tooltip" title="Add" class="btn btn-info btn-link btn-sm" (click)="addItemInList()" id="newListItemBtn">
-                          <i class="material-icons">add</i>
-                        </button>
-                      </td>
-                    </tr>
-                    <ng-container *ngIf="newList.title !='' ">
-                      <tr *ngFor="let item of newList.content">
-                        <td>
-                          <div class="form-check">
-                            <label class="form-check-label align-top">
-                              <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done">
-                              <span class="form-check-sign">
-                                <span class="check"></span>
-                              </span>
-                            </label>
-                          </div>
-                        </td>
-                        <td>
-                            <textarea rows="2" class="form-control no-border align-content-center" [(ngModel)]="item.text" wrap="soft"></textarea>
-                        </td>
-                        <td class="td-actions float-right">
-                          <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm" (click)="delItem($event)">
-                            <i class="material-icons">close</i>
-                          </button>
-                        </td>
-                      </tr>
-                    </ng-container>
-                  </tbody>
-              </table>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-round" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-info btn-round" (click)="addList()" data-dismiss="modal">Save</button>  
-          </div>
+    <div class="modal-content">
+      <div class="modal-newheader col-md-11">
+        <input class="form-control no-border" placeholder="Title..." type="text" [(ngModel)]="newList.title">
       </div>
+      <div class="modal-body">
+        <table class="table table-sm">
+          <tbody>
+            <tr>
+              <td>
+              </td>
+              <td>
+                <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newListItem"
+                  (keyup)="$event.key === 'Enter'? addItemInList(): true">
+              </td>
+              <td class="td-actions float-right">
+                <button type="button" rel="tooltip" title="Add" class="btn btn-info btn-link btn-sm" (click)="addItemInList()"
+                  id="newListItemBtn">
+                  <i class="material-icons">add</i>
+                </button>
+              </td>
+            </tr>
+            <ng-container *ngIf="newList.title !='' ">
+              <tr *ngFor="let item of newList.content">
+                <td>
+                  <div class="form-check">
+                    <label class="form-check-label align-top">
+                      <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done">
+                      <span class="form-check-sign">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <textarea rows="2" class="form-control no-border align-content-center" [(ngModel)]="item.text" wrap="soft"></textarea>
+                </td>
+                <td class="td-actions float-right">
+                  <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm" (click)="delItem($event)">
+                    <i class="material-icons">close</i>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-round" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-info btn-round" (click)="addList()" data-dismiss="modal">Save</button>
+      </div>
+    </div>
   </div>
 </div>

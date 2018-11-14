@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { toDoList } from '../models/todolist.model';
+import { toDoList, toDoItem } from '../models/todolist.model';
 import { Subject } from 'rxjs';
 import { HttpClient} from '@angular/common/http';
 
@@ -23,7 +23,6 @@ export class ToDoListService {
         this.http.post<{rspData: string}>('http://localhost:3000/api/lists', list)
         .subscribe((rspData) => {
                 this.commonList.unshift(list);
-                // this.emitSubjectEvent();
         });
     }
 
@@ -31,15 +30,15 @@ export class ToDoListService {
         this.http.delete('http://localhost:3000/api/lists/' + listId)
         .subscribe((rspData) => {
                 this.commonList.splice(listIndex, 1);
-                // this.emitSubjectEvent();
         });
     }
 
     addListItem(listIndex, listId, newItem) {
-        this.http.put<{message: string}>('http://localhost:3000/api/items/' + listId, newItem)
+        const newItemText = {text: newItem};
+        this.http.post<{message: string, newItem: toDoItem}>('http://localhost:3000/api/items/' + listId, newItemText)
         .subscribe((rspData) => {
                 if (rspData.message === 'success') {
-                    this.commonList[listIndex].content.unshift({_id: null, text: newItem, done: false});
+                    this.commonList[listIndex].content.unshift(rspData.newItem);
                     this.commonList[listIndex].lastupd = new Date;
                 }
         });

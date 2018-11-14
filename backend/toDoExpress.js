@@ -29,6 +29,7 @@ toDoExpApp.use((req,res,next) => {
 });
 
 toDoExpApp.post("/api/lists", (req, res, next) => {
+
   req.body.content.forEach(item => {
     if( item._id === null ) {
       item._id = mongoose.Types.ObjectId();
@@ -44,46 +45,77 @@ toDoExpApp.post("/api/lists", (req, res, next) => {
   res.status(201).json({
     message: "List added successfully"
   });
+
 });
 
 toDoExpApp.get('/api/lists',(req, res, next) => {
+
     ToDoList.find().sort({'lastupd':-1})
     .then(documents => {
       res.json(documents);
     });
+
 });
 
 toDoExpApp.delete('/api/lists/:id',(req, res, next) => {
+
   ToDoList.deleteOne({_id: req.params.id})
   .then(result => {
     res.status(200).json({message: 'List Deleted'});
   });
+
+});
+
+
+toDoExpApp.post('/api/items/:id',(req, res, next) => {
+  
+  const newItem = {
+    _id: mongoose.Types.ObjectId(),
+    text: req.body.text,
+    done: false
+  };
+
+  ToDoList.updateOne({'_id': req.params.id},
+  { 
+    $push: {content : newItem}
+  })
+  .then(result => {
+    res.status(200).json({message: 'success', newItem: newItem});
+  })
+  .catch(()=> {
+    res.status(400).json({message: 'failed', newItem: null});
+  });
+
 });
 
 toDoExpApp.patch('/api/items/:id',(req, res, next) => {
-  if (req.body._id === null) {
-    req.body.item._id = mongoose.Types.ObjectId();
-  };
 
-  // list.markModified('content');
-  ToDoList.updateOne({'_id': req.params.id, 'content._id': req.body._id}, {'$set': 
+  ToDoList.updateOne({'_id': req.params.id, 'content._id': req.body._id}, {$set: 
   {
     'content.$._id': req.body._id, 
     'content.$.text': req.body.text,
-    'content.$.done': req.body.done
-  }}, {upsert: true})
+    'content.$.done': req.body.doney
+  }})
   .then(result => {
+    console.log(result);
     res.status(200).json({message: 'success'});
+  })
+  .catch(()=> {
+    res.status(400).json({message: 'failed'});
   });
+
 });
 
 toDoExpApp.delete('/api/items/:listId/:contentId', (req, res, next) => {
-  // list.markModified('content');
+
   ToDoList.updateOne({'_id': req.params.listId}, {$pull: {'content': {'_id': req.params.contentId}}})
   .then((result) => {
     res.status(200).json({message: 'success'});
+  })
+  .catch(()=> {
+    res.status(400).json({message: 'failed'});
   });
+  
 });
-
 
 module.exports = toDoExpApp;

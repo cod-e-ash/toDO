@@ -10,15 +10,15 @@ import { Subscription } from 'rxjs';
 })
 export class BodyComponent implements OnInit, OnDestroy {
 
-  private colors: string[] = ['primary', 'info', 'success', 'danger', 'warning', 'info'];
-  private myList: toDoList[];
-  private wpend: boolean[] = [];
-  private newList: toDoList = {_id: null, user: '', title: '', content: [], lastupd: new Date};
-  private newListItem = '';
-  private newItem: string[] = [];
+  colors: string[] = ['primary', 'info', 'success', 'danger', 'warning', 'info'];
+  myList: toDoList[];
+  wpend: boolean[] = [];
+  newList: toDoList = {_id: null, user: '', title: '', content: [], lastupd: new Date};
+  newListItem = '';
+  newItem: string[] = [];
+  curId: string;
+  curIndex = -1;
   private getListSub: Subscription;
-  private curId: string;
-  private curIndex = -1;
 
   constructor(public toDoListService: ToDoListService) { }
 
