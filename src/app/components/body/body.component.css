@@ -12,6 +12,14 @@
     min-width: 10rem !important;
 }
 
+.card-body::-webkit-scrollbar { 
+    display: none;
+}
+
+textarea::-webkit-scrollbar { 
+    display: none;
+}
+
 .card [class*="card-header-"]:not(.card-header-icon):not(.card-header-text):not(.card-header-image) {
     padding-top: 5px;
     padding-bottom: 5px;

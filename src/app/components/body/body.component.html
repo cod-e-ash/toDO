@@ -1,8 +1,8 @@
-<div class="container-fluid body-container">
+<div class="container-fluid body-container" *ngIf="!isLoading">
   <div class="row justify-content-center">
     <div class="col-md-4" *ngFor="let list of myList;let listIndex = index">
       <div class="card">
-        <div class="card-header card-header-tabs " ngClass="{{ 'card-header-' + colors[(listIndex+list.title.substring(-1,1).charCodeAt(0)*list.title.substring(0,1).charCodeAt(0))%6] }}">
+        <div class="card-header card-header-tabs" ngClass="{{ 'card-header-' + colors[(listIndex+list.title.substring(-1,1).charCodeAt(0)*list.title.substring(0,1).charCodeAt(0))%6] }}">
           <div class="nav-tabs-navigation">
             <div class="nav-tabs-wrapper">
               <span class="nav-tabs-title font-weight-bold">{{list.title}}</span>
@@ -108,7 +108,7 @@
       <div class="modal-body">
         <table class="table table-sm">
           <tbody>
-            <tr>
+            <tr class="card-header">
               <td>
               </td>
               <td>
