@@ -31,7 +31,8 @@ itemRouter.patch('/:id',(req, res, next) => {
     {
       'content.$._id': req.body._id, 
       'content.$.text': req.body.text,
-      'content.$.done': req.body.doney
+      'content.$.done': req.body.done,
+      'lastupd': new Date
     }})
     .then(result => {
       res.status(200).json({message: 'success'});
@@ -44,7 +45,9 @@ itemRouter.patch('/:id',(req, res, next) => {
   
 itemRouter.delete('/:listId/:contentId', (req, res, next) => {
   
-    ToDoList.updateOne({'_id': req.params.listId}, {$pull: {'content': {'_id': req.params.contentId}}})
+    ToDoList.updateOne({'_id': req.params.listId}, {
+      $set: {lastupd: new Date},
+      $pull: {'content': {'_id': req.params.contentId}}})
     .then((result) => {
       res.status(200).json({message: 'success'});
     })

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { toDoList } from '../../models/todolist.model';
+import { toDoList, toDoItem } from '../../models/todolist.model';
 import { ToDoListService } from '../../services/todolist.service';
 import { Subscription } from 'rxjs';
 import { delay } from 'q';
@@ -19,14 +19,17 @@ export class BodyComponent implements OnInit, OnDestroy {
   newItem: string[] = [];
   curId: string;
   curIndex = -1;
+  isLoading = false;
   private getListSub: Subscription;
 
   constructor(public toDoListService: ToDoListService) { }
 
   ngOnInit() {
+    this.isLoading = true;
     this.toDoListService.getList();
     this.getListSub = this.toDoListService.getListSubListener()
       .subscribe((commonList: toDoList[]) => {
+        this.isLoading = false;
         this.myList = commonList;
         this.sortContent(-1);
       });
@@ -40,16 +43,20 @@ export class BodyComponent implements OnInit, OnDestroy {
 
   sortContent(listIndex= -1) {
       if (listIndex < 0) {
-        this.myList.forEach(list => {
-          list.content.sort(function (x, y) {
-              return (y.done === !x.done) ? 0 : x ? -1 : 1;
+          this.myList.forEach((list, index) => {
+            this.mySort(index);
           });
-        });
       } else {
-        this.myList[listIndex].content.sort(function (x, y) {
-          return (y.done === !x.done) ? 0 : x ? -1 : 1;
-        });
+        this.mySort(listIndex);
       }
+  }
+
+  mySort(listIndex) {
+    const newContent: toDoItem[] = [];
+    this.myList[listIndex].content.reverse().forEach(item => {
+      item.done ? newContent.push(item) : newContent.unshift(item);
+    });
+    this.myList[listIndex].content = newContent;
   }
 
   addItemInList(listIndex= -1, listId= '') {
@@ -70,6 +77,7 @@ export class BodyComponent implements OnInit, OnDestroy {
   updItemInList(listIndex= -1, listId= '', contentIndex) {
     if (listIndex > -1) {
         this.toDoListService.updListItem(listIndex, listId, contentIndex, this.myList[listIndex].content[contentIndex]);
+        // this.mySort(listIndex);
       }
   }
 
