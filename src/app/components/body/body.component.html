@@ -37,11 +37,12 @@
                     <td>
                     </td>
                     <td>
-                      <input class="form-control no-border cust-new-item" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]"
-                        (keyup)="$event.key === 'Enter'? ItemInList.click(): true">
+                      <input class="form-control no-border cust-new-item" type="text" placeholder=".. enter new task .."
+                        [(ngModel)]="newItem[listIndex]" (keyup)="$event.key === 'Enter'? ItemInList.click(): true">
                     </td>
                     <td class="td-actions float-right">
-                      <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemInList(listIndex, list._id)" #ItemInList>
+                      <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemInList(listIndex, list._id)"
+                        #ItemInList>
                         <i class="material-icons">add</i>
                       </button>
                     </td>
@@ -103,11 +104,12 @@
 </div>
 
 <!-- NEW LIST MODAL -->
-<div class="modal fade" id="new-list"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="new-list" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-newheader col-md-11">
-        <input class="form-control no-border text-muted" placeholder="Title..." type="text" [(ngModel)]="newList.title" autofocus>
+        <input class="form-control no-border text-muted" placeholder="Title..." type="text" [(ngModel)]="newList.title"
+          autofocus>
       </div>
       <div class="modal-body">
         <table class="table table-sm">
@@ -127,26 +129,26 @@
               </td>
             </tr>
             <!-- <ng-container *ngIf="newList.title !='' "> -->
-              <tr *ngFor="let item of newList?.content">
-                <td>
-                  <div class="form-check">
-                    <label class="form-check-label align-top">
-                      <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done">
-                      <span class="form-check-sign">
-                        <span class="check"></span>
-                      </span>
-                    </label>
-                  </div>
-                </td>
-                <td>
-                  <textarea rows="2" class="form-control no-border align-content-center" [(ngModel)]="item.text" wrap="soft"></textarea>
-                </td>
-                <td class="td-actions float-right">
-                  <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm" (click)="delItem($event)">
-                    <i class="material-icons">close</i>
-                  </button>
-                </td>
-              </tr>
+            <tr *ngFor="let item of newList?.content">
+              <td>
+                <div class="form-check">
+                  <label class="form-check-label align-top">
+                    <input class="form-check-input " type="checkbox" value="" [(ngModel)]="item.done">
+                    <span class="form-check-sign">
+                      <span class="check"></span>
+                    </span>
+                  </label>
+                </div>
+              </td>
+              <td>
+                <textarea rows="2" class="form-control no-border align-content-center" [(ngModel)]="item.text" wrap="soft"></textarea>
+              </td>
+              <td class="td-actions float-right">
+                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm" (click)="delItem($event)">
+                  <i class="material-icons">close</i>
+                </button>
+              </td>
+            </tr>
             <!-- </ng-container> -->
           </tbody>
         </table>
