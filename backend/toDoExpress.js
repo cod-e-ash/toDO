@@ -16,7 +16,7 @@ mongoose.connect('mongodb+srv://invo:mongopass2@cluster0-zkcca.mongodb.net/todo?
     console.log('Database Connected');
   })
   .catch(() => {
-    console.log('Database connect failed');
+    console.log('Database connection failed');
   });
 
 toDoExpApp.use(bodyParser.json());

@@ -1,0 +1,32 @@
+.top-extra-pads {
+    padding-top: 2rem;
+}
+
+.vr {
+    height: 30rem;
+    width: 7px;
+    border-radius: 10px;
+    /* box-shadow: inset 0 0 2px rgba(66, 66, 66, 0.3); */
+    /* background-color: rgb(252, 155, 98); */
+    /* background-color: rgb(206, 206, 206); */
+    background: linear-gradient(60deg, #fa5151, #4ac6ec);
+    margin: 30px;
+}
+
+.hr {
+    height: 6px;
+    width: 100%;
+    border-radius: 10px;
+    /* box-shadow: inset 0 0 2px rgba(0, 0, 0, .3); */
+    background: linear-gradient(60deg, #fa5151, #4ac6ec);
+    margin: 30px;
+}
+
+.card-body {
+    padding-bottom: 2rem;
+}
+
+button {
+    margin-left: 10px;
+    margin-right: 10px;
+}

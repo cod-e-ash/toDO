@@ -4,6 +4,15 @@ const mongoose = require('mongoose');
 
 const listRouter = express.Router();
 
+listRouter.get('',(req, res, next) => {
+  
+  ToDoList.find().sort({'lastupd':-1})
+  .then(documents => {
+    res.json(documents);
+  });
+
+});
+
 listRouter.post('', (req, res, next) => {
 
     req.body.content.forEach(item => {
@@ -23,15 +32,6 @@ listRouter.post('', (req, res, next) => {
     });
   
   });
-  
-  listRouter.get('',(req, res, next) => {
-  
-      ToDoList.find().sort({'lastupd':-1})
-      .then(documents => {
-        res.json(documents);
-      });
-  
-});
   
 listRouter.delete('/:id',(req, res, next) => {
   
