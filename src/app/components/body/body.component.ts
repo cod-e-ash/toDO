@@ -29,9 +29,12 @@ export class BodyComponent implements OnInit, OnDestroy {
     this.toDoListService.getList();
     this.getListSub = this.toDoListService.getListSubListener()
       .subscribe((commonList: toDoList[]) => {
-        this.isLoading = false;
+        // setTimeout(() => {
+        // this.isLoading = false;
+        // }, 2000);
         this.myList = commonList;
         this.sortContent(-1);
+        this.isLoading = false;
       });
     this.newList._id = '';
     this.newList.title = '';
@@ -61,7 +64,7 @@ export class BodyComponent implements OnInit, OnDestroy {
 
   addItemInList(listIndex= -1, listId= '') {
     if (listIndex < 0) {
-      if (this.newListItem.length > 0 && this.newList.title.length > 0) {
+      if (this.newListItem.length > 0) {
         this.newList.content.unshift({_id: null, text: this.newListItem, done: false});
         this.newList.lastupd = new Date;
         this.newListItem = '';

@@ -8,6 +8,7 @@
         <div class="card-header card-header-tabs" ngClass="{{ 'card-header-' + colors[(listIndex+list.title.substring(-1,1).charCodeAt(0)*list.title.substring(0,1).charCodeAt(0))%6] }}">
           <div class="nav-tabs-navigation">
             <div class="nav-tabs-wrapper">
+              <!-- <input class="nav-tabs-title font-weight-bold form-control cust-title" type="text" [(ngModel)]="list.title"> -->
               <span class="nav-tabs-title font-weight-bold">{{list.title}}</span>
               <ul class="nav nav-tabs float-right" data-tabs="tabs">
                 <li class="nav-item" rel="tooltip" title="Toggle Pending">
@@ -27,7 +28,7 @@
             </div>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" #scrollstyle>
           <div class="tab-content">
             <div class="tab-pane active" id="profile">
               <table class="table table-sm">
@@ -36,11 +37,11 @@
                     <td>
                     </td>
                     <td>
-                      <input class="form-control no-border" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]"
-                        (keyup)="$event.key === 'Enter'? addItemInList(listIndex, list._id): true">
+                      <input class="form-control no-border cust-new-item" type="text" placeholder=".. enter new task .." [(ngModel)]="newItem[listIndex]"
+                        (keyup)="$event.key === 'Enter'? ItemInList.click(): true">
                     </td>
                     <td class="td-actions float-right">
-                      <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemInList(listIndex, list._id)">
+                      <button type="button" class="btn btn-info btn-link btn-sm" (click)="addItemInList(listIndex, list._id)" #ItemInList>
                         <i class="material-icons">add</i>
                       </button>
                     </td>
@@ -74,7 +75,7 @@
             </div>
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer" [ngClass]="{'extrashadow':list.content.length > 5}">
           <div class="stats">
             <i class="material-icons">access_time</i> {{list.lastupd | timeAgo }}
           </div>
@@ -102,11 +103,11 @@
 </div>
 
 <!-- NEW LIST MODAL -->
-<div class="modal fade" id="new-list" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="new-list"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-newheader col-md-11">
-        <input class="form-control no-border" placeholder="Title..." type="text" [(ngModel)]="newList.title">
+        <input class="form-control no-border text-muted" placeholder="Title..." type="text" [(ngModel)]="newList.title" autofocus>
       </div>
       <div class="modal-body">
         <table class="table table-sm">
@@ -125,8 +126,8 @@
                 </button>
               </td>
             </tr>
-            <ng-container *ngIf="newList.title !='' ">
-              <tr *ngFor="let item of newList.content">
+            <!-- <ng-container *ngIf="newList.title !='' "> -->
+              <tr *ngFor="let item of newList?.content">
                 <td>
                   <div class="form-check">
                     <label class="form-check-label align-top">
@@ -146,13 +147,13 @@
                   </button>
                 </td>
               </tr>
-            </ng-container>
+            <!-- </ng-container> -->
           </tbody>
         </table>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-round" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-info btn-round" (click)="addList()" data-dismiss="modal">Save</button>
+      <div class="modal-footer" [ngClass]="{'extrashadow':newList.content.length > 5}">
+        <button type="button" class="btn btn-round btn-info" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger btn-round" (click)="addList()" data-dismiss="modal" [disabled]="newList.content.length <=0 || newList.title.length <=0">Save</button>
       </div>
     </div>
   </div>
