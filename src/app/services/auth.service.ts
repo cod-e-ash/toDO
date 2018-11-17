@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
+    private token: string;
+    private userName: string;
+
     constructor(private http: HttpClient, private router: Router) {}
 
     createUser(userDetails: UserDetails, passWord: string) {
@@ -26,15 +29,25 @@ export class AuthService {
     }
 
     loginUser(authDetails: AuthDetail) {
-        this.http.post<{message: string, token: any, err: any}>('http://localhost:3000/api/users/login', authDetails)
+        this.http.post<{message: string, token: string, userName: string, err: any}>('http://localhost:3000/api/users/login', authDetails)
         .subscribe(rspData => {
             if (rspData.message === 'success') {
-                console.log('Login Successful');
                 console.log(rspData);
-                this.router.navigate(['/']);
+                this.token = rspData.token;
+                this.userName = rspData.userName;
+                this.router.navigate(['']);
             } else {
-                console.log(rspData);
+                console.log(rspData.err);
             }
         });
     }
+
+    getAuthToken() {
+        return this.token;
+    }
+
+    getAuthUser() {
+        return this.userName;
+    }
+
 }

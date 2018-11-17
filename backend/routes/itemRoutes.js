@@ -4,15 +4,17 @@ const mongoose = require('mongoose');
 
 const itemRouter = express.Router();
 
-itemRouter.post('/:id',(req, res, next) => {
-  
+const checkAuth = require('../middleware/checkAuth');
+
+itemRouter.post('/:id', checkAuth, (req, res, next) => {
+
     const newItem = {
       _id: mongoose.Types.ObjectId(),
       text: req.body.text,
       done: false
     };
-  
-    ToDoList.updateOne({'_id': req.params.id},
+
+    ToDoList.updateOne({'_id': req.params.id, 'user': req.headers.user},
     { 
       $push: {content : newItem}
     })
@@ -25,9 +27,9 @@ itemRouter.post('/:id',(req, res, next) => {
   
 });
   
-itemRouter.patch('/:id',(req, res, next) => {
+itemRouter.patch('/:id', checkAuth, (req, res, next) => {
   
-    ToDoList.updateOne({'_id': req.params.id, 'content._id': req.body._id}, {$set: 
+    ToDoList.updateOne({'_id': req.params.id, 'user': req.headers.user, 'content._id': req.body._id}, {$set: 
     {
       'content.$._id': req.body._id, 
       'content.$.text': req.body.text,
@@ -43,9 +45,9 @@ itemRouter.patch('/:id',(req, res, next) => {
   
 });
   
-itemRouter.delete('/:listId/:contentId', (req, res, next) => {
-  
-    ToDoList.updateOne({'_id': req.params.listId}, {
+itemRouter.delete('/:listId/:contentId', checkAuth, (req, res, next) => {
+
+    ToDoList.updateOne({'_id': req.params.listId, 'user': req.headers.user}, {
       $set: {lastupd: new Date},
       $pull: {'content': {'_id': req.params.contentId}}})
     .then((result) => {

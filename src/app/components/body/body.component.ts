@@ -3,6 +3,8 @@ import { toDoList, toDoItem } from '../../models/todolist.model';
 import { ToDoListService } from '../../services/todolist.service';
 import { Subscription } from 'rxjs';
 import { delay } from 'q';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-body',
@@ -14,6 +16,7 @@ export class BodyComponent implements OnInit, OnDestroy {
   colors: string[] = ['primary', 'info', 'success', 'danger', 'warning', 'info'];
   myList: toDoList[];
   wpend: boolean[] = [];
+  curUser = '';
   newList: toDoList = {_id: null, user: '', title: '', content: [], lastupd: new Date};
   newListItem = '';
   newItem: string[] = [];
@@ -22,10 +25,16 @@ export class BodyComponent implements OnInit, OnDestroy {
   isLoading = false;
   private getListSub: Subscription;
 
-  constructor(public toDoListService: ToDoListService) { }
+  constructor(public toDoListService: ToDoListService, public authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.isLoading = true;
+    // Check if user logged in
+    this.curUser = this.authService.getAuthUser();
+    if (!this.curUser || this.curUser === '' ) {
+      this.router.navigate(['login']);
+    }
+
     this.toDoListService.getList();
     this.getListSub = this.toDoListService.getListSubListener()
       .subscribe((commonList: toDoList[]) => {
@@ -38,6 +47,7 @@ export class BodyComponent implements OnInit, OnDestroy {
       });
     this.newList._id = '';
     this.newList.title = '';
+    this.newList.user = this.curUser;
   }
 
   ngOnDestroy() {
@@ -95,14 +105,14 @@ export class BodyComponent implements OnInit, OnDestroy {
 
   addList() {
     if (this.newList.title.length > 0 && this.newList.content.length > 0) {
-      this.newList.user = 'ashish';
+      this.newList.user = this.curUser;
       this.toDoListService.addList(this.newList);
-      this.newList = {_id: null, user: '', title: '', content: [], lastupd: new Date};
+      this.newList = {_id: null, user: this.curUser, title: '', content: [], lastupd: new Date};
     }
   }
 
   newListReset() {
-    this.newList = {_id: null, user: '', title: '', content: [], lastupd: new Date};
+    this.newList = {_id: null, user: this.curUser, title: '', content: [], lastupd: new Date};
   }
 
   setCurItem(listIndex, listId) {

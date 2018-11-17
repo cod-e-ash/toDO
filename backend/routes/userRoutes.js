@@ -50,7 +50,7 @@ userRouter.post('/login', (req, res, next) => {
             firstName: curUser.firstName,
             lastName: curUser.lastName
         }, "iLoVe@neW#ash@kEy", {expiresIn: '2d' });
-        res.status(200).json({message: 'success', token: token});
+        res.status(200).json({message: 'success', token: token, userName: curUser.userName});
     })
     .catch(err => {
         return res.status(401).json({

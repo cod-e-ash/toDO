@@ -4,16 +4,24 @@ const mongoose = require('mongoose');
 
 const listRouter = express.Router();
 
-listRouter.get('',(req, res, next) => {
+const checkAuth = require('../middleware/checkAuth');
+
+listRouter.get('', checkAuth, (req, res, next) => {
   
-  ToDoList.find().sort({'lastupd':-1})
+  ToDoList.find({'user': req.headers.user}).sort({'lastupd':-1})
   .then(documents => {
     res.json(documents);
   });
 
 });
 
-listRouter.post('', (req, res, next) => {
+listRouter.post('', checkAuth, (req, res, next) => {
+    
+    console.log(req.body);
+    console.log(req.headers);
+    if (req.body.user != req.headers.user) {
+      return res.status(401).json({message: 'failed'});
+    }
 
     req.body.content.forEach(item => {
       if( item._id === null ) {
@@ -33,14 +41,13 @@ listRouter.post('', (req, res, next) => {
   
   });
   
-listRouter.delete('/:id',(req, res, next) => {
+listRouter.delete('/:id', checkAuth, (req, res, next) => {
   
-    ToDoList.deleteOne({_id: req.params.id})
+    ToDoList.deleteOne({'_id': req.params.id, 'user': req.headers.user})
     .then(result => {
       res.status(200).json({message: 'List Deleted'});
     });
   
 });
-  
 
 module.exports = listRouter;

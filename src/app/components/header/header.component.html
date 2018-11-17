@@ -25,15 +25,20 @@
         <strong> ToDO </strong>
       </a>
       <!-- <li class="nav-item active"> -->
-        <a class="btn btn-danger btn-sm btn-round" href="#" data-toggle="modal" data-target="#new-list">
+        <a class="btn btn-danger btn-sm btn-round" href="#" data-toggle="modal" data-target="#new-list" *ngIf="curUser && curUser!==''">
           <i class="material-icons">add </i>
           <strong> New List </strong> <span class="sr-only">(current)</span>
         </a>
       <!-- </li> -->
       <ul class="navbar-nav d-flex flex-row">
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="curUser==='' || !curUser">
           <button class="btn btn-info btn-round btn-sm" href="#" routerLink="/login">
             <strong> Login </strong> <span class="sr-only">(current)</span>
+          </button>
+        </li>
+        <li class="nav-item" *ngIf="curuser && curUser!==''">
+          <button class="btn btn-info btn-round btn-sm" href="#" routerLink="/login">
+            <strong> Logout </strong> <span class="sr-only">(current)</span>
           </button>
         </li>
         <li class="nav-item">
