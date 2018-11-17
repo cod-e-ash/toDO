@@ -27,16 +27,17 @@ userRouter.post('/signup', (req, res, next) => {
 });
 
 userRouter.post('/login', (req, res, next) => {
+    // console.log(req.body);
     let curUser;
-    UserDetails.findOne({userName: req.body.userDetails.userName})
+    UserDetails.findOne({userName: req.body.userName})
     .then(rtnUser => {
-        if(!rtnDetails) {
+        if(!rtnUser) {
             return res.status(401).json({
                 message: 'failed'
             });
         }
-        curuser = rtnDetails;
-        return bcrypt.compare(req.body.passWord, userDetails.passWord);
+        curUser = rtnUser;
+        return bcrypt.compare(req.body.passWord, curUser.passWord);
     })
     .then(result => {
         if(!result) {
@@ -49,6 +50,7 @@ userRouter.post('/login', (req, res, next) => {
             firstName: curUser.firstName,
             lastName: curUser.lastName
         }, "iLoVe@neW#ash@kEy", {expiresIn: '2d' });
+        res.status(200).json({message: 'success', token: token});
     })
     .catch(err => {
         return res.status(401).json({
