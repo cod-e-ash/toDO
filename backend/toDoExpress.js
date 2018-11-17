@@ -6,12 +6,13 @@ const toDoExpApp = express();
 
 const itemRoutes = require('./routes/itemRoutes');
 const listRoutes = require('./routes/listRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
-mongoose.connect('mongodb+srv://invo:mongopass2@cluster0-zkcca.mongodb.net/todo?retryWrites=true')
+mongoose.connect('mongodb+srv://invo:mongopass2@cluster0-zkcca.mongodb.net/todo')
   .then(() => {
     console.log('Database Connected');
   })
@@ -31,5 +32,6 @@ toDoExpApp.use((req,res,next) => {
 
 toDoExpApp.use('/api/lists', listRoutes);
 toDoExpApp.use('/api/items', itemRoutes);
+toDoExpApp.use('/api/users', userRoutes);
 
 module.exports = toDoExpApp;

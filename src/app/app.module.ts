@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {TimeAgoPipe} from 'time-ago-pipe';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -22,6 +22,7 @@ import { LoginComponent } from './components/auth/login/login.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule
   ],
   providers: [],

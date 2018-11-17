@@ -8,22 +8,28 @@
             <p class="card-category">i am an existing user</p>
           </div>
           <div class="card-body">
-            <form>
+            <form (submit)="onLogin()" [formGroup]="loginForm">
               <div class="row">
                 <div class="col-md-11">
                   <div class="form-group">
                     <label class="bmd-label-floating">Email address</label>
-                    <input type="email" class="form-control">
+                    <input type="email" class="form-control" formControlName="lUsername">
                   </div>
                 </div>
+              </div>
+              <div class="col-md-12" *ngIf="loginForm.get('lUsername').invalid && loginForm.touched">
+                <small id="emailLoginError" class="text-danger">Invalid Email/Username.</small>
               </div>
               <div class="row">
                 <div class="col-md-11">
                   <div class="form-group">
                     <label class="bmd-label-floating">Password</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" formControlName="lPassword">
                   </div>
                 </div>
+              </div>
+              <div class="col-md-12" *ngIf="loginForm.get('lPassword').invalid && submitted">
+                <small id="passwordLoginError" class="text-danger">Invalid Password.</small>
               </div>
               <div class="row top-extra-pads">
                 <button type="submit" class="btn btn-info align-self-center">Login</button>
@@ -42,36 +48,45 @@
             <p class="card-category text-right">i am a new user</p>
           </div>
           <div class="card-body">
-            <form>
+            <form [formGroup]="signUpForm" (submit)="onSignUp()">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="bmd-label-floating">Fist Name</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" formControlName="sFirstName">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="bmd-label-floating">Last Name</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" formControlName="sLastName">
                   </div>
                 </div>
+              </div>
+              <div class="col-md-12" *ngIf="signUpForm.get('sFirstName').invalid && submitted">
+                <small id="passwordLoginError" class="text-danger">Name Required.</small>
               </div>
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
                     <label class="bmd-label-floating">Email address</label>
-                    <input type="email" class="form-control">
+                    <input type="email" class="form-control" formControlName="sUsername">
                   </div>
                 </div>
+              </div>
+              <div class="col-md-12" *ngIf="signUpForm.get('sUsername').invalid && submitted">
+                <small id="passwordLoginError" class="text-danger">Invalid Email Address.</small>
               </div>
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
                     <label class="bmd-label-floating">Password</label>
-                    <input type="password" class="form-control">
+                    <input type="password" class="form-control" formControlName="sPassword">
                   </div>
                 </div>
+              </div>
+              <div class="col-md-12" *ngIf="signUpForm.get('sPassword').invalid && submitted">
+                <small id="passwordLoginError" class="text-danger">Password between 6 to 20 chars.</small>
               </div>
               <div class="row top-extra-pads">
                 <button type="submit" class="btn btn-danger ml-auto">Create</button>
