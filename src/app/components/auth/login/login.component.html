@@ -17,19 +17,16 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-12" *ngIf="loginForm.get('lUsername').invalid && loginForm.touched">
-                <small id="emailLoginError" class="text-danger">Invalid Email/Username.</small>
-              </div>
               <div class="row">
                 <div class="col-md-11">
                   <div class="form-group">
                     <label class="bmd-label-floating">Password</label>
-                    <input type="password" class="form-control" formControlName="lPassword">
+                    <input type="password" class="form-control" formControlName="lPassword" (onfocus)="loginForm.get('lErrorMsg').value=''">
                   </div>
                 </div>
               </div>
-              <div class="col-md-12" *ngIf="loginForm.get('lPassword').invalid && submitted">
-                <small id="passwordLoginError" class="text-danger">Invalid Password.</small>
+              <div class="col-md-12" *ngIf="loginForm.get('lErrorMsg').value!==''">
+                <label class="text-danger">{{loginForm.get('lErrorMsg').value}}</label>
               </div>
               <div class="row top-extra-pads">
                 <button type="submit" class="btn btn-info align-self-center">Login</button>

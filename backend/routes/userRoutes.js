@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 const userRouter = express.Router();
 
 userRouter.post('/signup', (req, res, next) => {
-    console.log(req);
     bcrypt.hash(req.body.passWord, 10)
     .then(hashPass =>{
         const user = new UserDetails({
@@ -18,7 +17,13 @@ userRouter.post('/signup', (req, res, next) => {
         });
         user.save()
         .then(result => {
-            res.status(201).json({message: 'success'});
+            const token = jwt.sign({
+                userName: req.body.userName, 
+                firstName: req.body.firstName,
+                lastName: req.body.lastName
+            }, "iLoVe@neW#ash@kEy", {expiresIn: '2d' });
+            res.status(200).json({message: 'success', token: token, userName: req.body.userName});
+            // res.status(201).json({message: 'success'});
         })
         .catch(err => {
             res.status(500).json({message: 'failed', error: err});
@@ -50,12 +55,12 @@ userRouter.post('/login', (req, res, next) => {
             firstName: curUser.firstName,
             lastName: curUser.lastName
         }, "iLoVe@neW#ash@kEy", {expiresIn: '2d' });
-        res.status(200).json({message: 'success', token: token, userName: curUser.userName});
+        return res.status(200).json({message: 'success', token: token, userName: curUser.userName});
     })
     .catch(err => {
-        return res.status(401).json({
-            message: 'failed'
-        });
+        // return res.status(401).json({
+            // message: 'failed'
+        // });
     });
 });
 

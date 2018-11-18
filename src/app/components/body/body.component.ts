@@ -33,25 +33,27 @@ export class BodyComponent implements OnInit, OnDestroy {
     this.curUser = this.authService.getAuthUser();
     if (!this.curUser || this.curUser === '' ) {
       this.router.navigate(['login']);
+      return;
     }
-
     this.toDoListService.getList();
     this.getListSub = this.toDoListService.getListSubListener()
-      .subscribe((commonList: toDoList[]) => {
-        // setTimeout(() => {
-        // this.isLoading = false;
-        // }, 2000);
-        this.myList = commonList;
-        this.sortContent(-1);
-        this.isLoading = false;
-      });
+    .subscribe((commonList: toDoList[]) => {
+      // setTimeout(() => {
+      // this.isLoading = false;
+      // }, 2000);
+      this.myList = commonList;
+      this.sortContent(-1);
+      this.isLoading = false;
+    });
     this.newList._id = '';
     this.newList.title = '';
     this.newList.user = this.curUser;
   }
 
   ngOnDestroy() {
-    this.getListSub.unsubscribe();
+    try {
+      this.getListSub.unsubscribe();
+    } catch {}
   }
 
   sortContent(listIndex= -1) {

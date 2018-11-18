@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -8,11 +10,19 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HeaderComponent implements OnInit {
   curUser = '';
+  private curUserSub: Subscription;
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.curUser = this.authService.getAuthUser();
+    this.curUserSub = this.authService.getCurUserListener()
+    .subscribe((curUser: string) => {
+      this.curUser = curUser;
+    });
   }
 
+  logout() {
+    this.authService.logoutUser();
+    this.router.navigate(['login']);
+  }
 }

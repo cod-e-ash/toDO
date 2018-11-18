@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { UserDetails } from '../../../models/user.model';
 import { AuthDetail } from '../../../models/auth.model';
+import { invalid } from '@angular/compiler/src/render3/view/util';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.loginForm = new FormGroup({
       'lUsername': new FormControl(null, {validators: [Validators.required, Validators.email]}),
-      'lPassword': new FormControl(null, {validators: [Validators.required, Validators.minLength(6)]})
+      'lPassword': new FormControl(null, {validators: [Validators.required, Validators.minLength(6)]}),
+      'lErrorMsg': new FormControl(null)
     });
 
     this.signUpForm = new FormGroup({
@@ -49,7 +51,6 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-    console.log(this.loginForm);
     if (this.loginForm.invalid) {
       return;
     }
@@ -58,7 +59,13 @@ export class LoginComponent implements OnInit {
       userName: this.loginForm.value.lUsername,
       passWord: this.loginForm.value.lPassword,
     };
-    this.authService.loginUser(newUser);
+    const result = this.authService.loginUser(newUser);
+    if (result === 'err') {
+      this.loginForm.patchValue({lErrorMsg: 'Invalid Username or Password'});
+      this.loginForm.setErrors({'invalid': true });
+    } else {
+      // this.loginForm.patchValue({lErrorMsg: ''});
+    }
     // this.loginForm.reset();
   }
 

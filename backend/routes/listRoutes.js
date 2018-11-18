@@ -17,8 +17,6 @@ listRouter.get('', checkAuth, (req, res, next) => {
 
 listRouter.post('', checkAuth, (req, res, next) => {
     
-    console.log(req.body);
-    console.log(req.headers);
     if (req.body.user != req.headers.user) {
       return res.status(401).json({message: 'failed'});
     }
