@@ -4,6 +4,7 @@ import { AuthService } from '../../../services/auth.service';
 import { UserDetails } from '../../../models/user.model';
 import { AuthDetail } from '../../../models/auth.model';
 import { invalid } from '@angular/compiler/src/render3/view/util';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
   signUpForm: FormGroup;
   isLoading = false;
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -33,40 +34,64 @@ export class LoginComponent implements OnInit {
     });
 
     // this.loginForm.setValue({lUsername: '', lPassword: ''});
-    // this.signUpForm.reset();
+    // this.sf.reset();
   }
 
+  // Convienience Function
+  get lf() { return this.loginForm.controls; }
+  get sf() { return this.signUpForm.controls; }
+
   onSignUp() {
+    this.isLoading = true;
     if (this.signUpForm.invalid) {
+      this.isLoading = false;
       return;
     }
     // this.isLoading = true;
     const newUser: UserDetails = {
-      userName: this.signUpForm.value.sUsername,
-      firstName: this.signUpForm.value.sFirstName,
-      lastName: this.signUpForm.value.sLastName
+      userName: this.sf.sUsername.value,
+      firstName: this.sf.sFirstName.value,
+      lastName: this.sf.sLastName.value
     };
-    this.authService.createUser(newUser, this.signUpForm.value.sPassword);
-    // this.signUpForm.reset();
+    this.authService.createUser(newUser, this.sf.sPassword.value)
+    .subscribe(result => {
+      if (this.authService.getAuthUser() === '') {
+        this.signUpForm.setErrors({'invalid': true });
+      } else {
+        this.signUpForm.reset();
+        this.router.navigate(['']);
+      }
+    }, err => {
+      // this.loginForm.patchValue({lErrorMsg: 'Invalid Username or Password'});
+      this.signUpForm.setErrors({'invalid': true });
+    });
+    this.isLoading = false;
   }
 
   onLogin() {
     if (this.loginForm.invalid) {
       return;
     }
-    // this.isLoading = true;
+    this.isLoading = true;
     const newUser: AuthDetail = {
-      userName: this.loginForm.value.lUsername,
-      passWord: this.loginForm.value.lPassword,
+      userName: this.lf.lUsername.value,
+      passWord: this.lf.lPassword.value,
     };
-    const result = this.authService.loginUser(newUser);
-    if (result === 'err') {
+    this.authService.loginUser(newUser)
+    .subscribe(result => {
+      if (this.authService.getAuthUser() === '') {
+        this.loginForm.patchValue({lErrorMsg: 'Invalid Username or Password'});
+        this.loginForm.setErrors({'invalid': true });
+      } else {
+        this.router.navigate(['']);
+        this.loginForm.patchValue({lErrorMsg: ''});
+        this.loginForm.reset();
+      }
+    }, err => {
       this.loginForm.patchValue({lErrorMsg: 'Invalid Username or Password'});
       this.loginForm.setErrors({'invalid': true });
-    } else {
-      // this.loginForm.patchValue({lErrorMsg: ''});
-    }
-    // this.loginForm.reset();
+    });
+    this.isLoading = false;
   }
 
 }

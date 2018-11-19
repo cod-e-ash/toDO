@@ -4,6 +4,7 @@ import { UserDetails } from '../models/user.model';
 import { AuthDetail } from '../models/auth.model';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -20,34 +21,40 @@ export class AuthService {
             lastName: userDetails.lastName,
             userName: userDetails.userName,
             passWord: passWord};
-        this.http.post<{message: string, token: string, userName: string, err: any}>('http://localhost:3000/api/users/signup', newUser)
-        .subscribe(rspData => {
+       return this.http.post<{message: string,
+        token: string,
+        userName: string,
+        err: any}>('http://localhost:3000/api/users/signup', newUser)
+        .pipe(map(rspData => {
             if (rspData.message === 'success') {
                 this.token = rspData.token;
                 this.userName = rspData.userName;
-                this.router.navigate(['']);
                 this.emitSubjectEvent();
+                localStorage.setItem('currentUser', JSON.stringify(rspData));
+                return 'created and logged';
+            } else {
+                return 'err';
             }
-        });
-        if (this.userName === '') {
-            return 'err';
-        }
+        }));
     }
 
     loginUser(authDetails: AuthDetail) {
-        this.http.post<{message: string, token: string, userName: string, err: any}>('http://localhost:3000/api/users/login', authDetails)
-        .subscribe(rspData => {
+        return this.http.post<{
+            message: string,
+            token: string,
+            userName: string,
+            err: any}>('http://localhost:3000/api/users/login', authDetails)
+        .pipe(map(rspData => {
             if (rspData.message === 'success') {
                 this.token = rspData.token;
                 this.userName = rspData.userName;
-                this.router.navigate(['']);
                 this.emitSubjectEvent();
+                localStorage.setItem('currentUser', JSON.stringify(rspData));
                 return 'logged';
+            } else {
+                return 'err';
             }
-        });
-        if (!this.userName || this.userName === '') {
-            return 'err';
-        }
+        }));
     }
 
     getAuthToken() {
@@ -55,6 +62,13 @@ export class AuthService {
     }
 
     getAuthUser() {
+        if (!this.userName || this.userName === '') {
+            const curUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (curUser) {
+                this.userName = curUser.userName;
+                this.token = curUser.token;
+            }
+        }
         return this.userName;
     }
 
@@ -70,6 +84,7 @@ export class AuthService {
         this.token = null;
         this.userName = null;
         this.emitSubjectEvent();
+        localStorage.removeItem('currentUser');
         // this.curUserSubject.complete();
     }
 

@@ -1,4 +1,7 @@
 <div class="content">
+  <div>
+    <i class="fa fa-spinner fa-5x spinner" [ngClass]="{'fa-spin': isLoading}" *ngIf="isLoading"></i>
+  </div>
   <div class="container-fluid top-extra-pads">
     <div class="row align-items-center">
       <div class="col-md-4 ml-auto">
@@ -60,7 +63,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-12" *ngIf="signUpForm.get('sFirstName').invalid && submitted">
+              <div class="col-md-12" *ngIf="sf.sFirstName.errors && submitted">
                 <small id="passwordLoginError" class="text-danger">Name Required.</small>
               </div>
               <div class="row">
@@ -71,7 +74,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-12" *ngIf="signUpForm.get('sUsername').invalid && submitted">
+              <div class="col-md-12" *ngIf="sf.sUsername.errors && submitted">
                 <small id="passwordLoginError" class="text-danger">Invalid Email Address.</small>
               </div>
               <div class="row">
@@ -82,7 +85,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-12" *ngIf="signUpForm.get('sPassword').invalid && submitted">
+              <div class="col-md-12" *ngIf="sf.sPassword.errors && submitted">
                 <small id="passwordLoginError" class="text-danger">Password between 6 to 20 chars.</small>
               </div>
               <div class="row top-extra-pads">

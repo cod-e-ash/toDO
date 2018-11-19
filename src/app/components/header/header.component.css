@@ -6,3 +6,9 @@ tr td {
   padding-top: 2px;
   /* white-space:pre; */
 }
+
+.abs-center-x {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}

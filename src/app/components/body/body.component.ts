@@ -1,17 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { toDoList, toDoItem } from '../../models/todolist.model';
 import { ToDoListService } from '../../services/todolist.service';
 import { Subscription } from 'rxjs';
-import { delay } from 'q';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+// import * as $ from 'jquery';
+import * as bootstrap from 'bootstrap';
+// declare var $ :any;
 
 @Component({
   selector: 'app-body',
   templateUrl: './body.component.html',
   styleUrls: ['./body.component.css']
 })
-export class BodyComponent implements OnInit, OnDestroy {
+export class BodyComponent implements OnInit, OnDestroy, AfterViewInit {
 
   colors: string[] = ['primary', 'info', 'success', 'danger', 'warning', 'info'];
   myList: toDoList[];
@@ -24,6 +26,8 @@ export class BodyComponent implements OnInit, OnDestroy {
   curIndex = -1;
   isLoading = false;
   private getListSub: Subscription;
+
+  @ViewChild('newlistmodal') newListModal: ElementRef;
 
   constructor(public toDoListService: ToDoListService, public authService: AuthService, private router: Router) { }
 
@@ -115,6 +119,11 @@ export class BodyComponent implements OnInit, OnDestroy {
 
   newListReset() {
     this.newList = {_id: null, user: this.curUser, title: '', content: [], lastupd: new Date};
+    // console.log(this.newListModal.nativeElement);
+    // $(this.newListModal.nativeElement).removeClass('show');
+    // $(this.newListModal.nativeElement).toggleClass('hide');
+    jQuery(this.newListModal.nativeElement).modal('hide');
+    // $('#myModal').modal('hide');
   }
 
   setCurItem(listIndex, listId) {
@@ -127,4 +136,9 @@ export class BodyComponent implements OnInit, OnDestroy {
     this.curIndex = -1;
     this.curId = '';
   }
+
+  ngAfterViewInit() {
+  }
+
+
 }

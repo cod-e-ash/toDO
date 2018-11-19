@@ -28,3 +28,12 @@ button {
     margin-left: 10px;
     margin-right: 10px;
 }
+
+.spinner {
+    color: darkgrey;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }

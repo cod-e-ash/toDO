@@ -104,7 +104,7 @@
 </div>
 
 <!-- NEW LIST MODAL -->
-<div class="modal fade" id="new-list" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="new-list" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" #newlistmodal>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-newheader col-md-11">
@@ -154,10 +154,12 @@
         </table>
       </div>
       <div class="modal-footer" [ngClass]="{'extrashadow':newList.content.length > 5}">
-        <button type="button" class="btn btn-round btn-info" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger btn-round" (click)="addList()" data-dismiss="modal">Save</button>
-        <!-- <button type="button" class="btn btn-danger btn-round" (click)="addList()" data-dismiss="modal" [disabled]="newList.content.length <=0 || newList.title.length <=0">Save</button> -->
+          <button type="button" class="btn btn-round btn-info" (click)="newListReset()">Cancel</button>
+          <button type="button" class="btn btn-danger btn-round" (click)="addList()" data-dismiss="modal" *ngIf="newList.content.length > 0  && newList.title.length > 0">Save</button>
       </div>
+      <!-- <div class="align-self-center">
+          <label><small class="text-alert dismissable text-danger">Testing</small></label>
+      </div> -->
     </div>
   </div>
 </div>
