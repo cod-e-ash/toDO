@@ -1,0 +1,7 @@
+{
+    "env": {
+      "MONGO_ATLAS_PW": "mongopass2",
+      "JWT_KEY": "iLoVe@neW#ash@kEy"
+    }
+  }
+  

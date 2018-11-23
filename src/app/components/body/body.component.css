@@ -116,3 +116,7 @@ tr td {
 .cust-new-item {
   width: 80%;
 }
+
+#new-list {
+  padding-top: 4rem;
+}

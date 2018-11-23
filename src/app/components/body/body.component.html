@@ -47,7 +47,7 @@
                       </button>
                     </td>
                   </tr>
-                  <ng-container *ngFor="let item of list.content; let contentIndex = index">
+                  <ng-container *ngFor="let item of list.content; let contentIndex = index" >
                     <tr *ngIf="(wpend[listIndex] != false && item.done == false) || !wpend[listIndex]">
                       <td>
                         <div class="form-check">
@@ -155,7 +155,7 @@
       </div>
       <div class="modal-footer" [ngClass]="{'extrashadow':newList.content.length > 5}">
           <button type="button" class="btn btn-round btn-info" (click)="newListReset()">Cancel</button>
-          <button type="button" class="btn btn-danger btn-round" (click)="addList()" data-dismiss="modal" *ngIf="newList.content.length > 0  && newList.title.length > 0">Save</button>
+          <button type="button" class="btn btn-danger btn-round" (click)="addList()" *ngIf="newList.title.length > 0 && (newList.content.length > 0 || newListItem.length > 0)">Save</button>
       </div>
       <!-- <div class="align-self-center">
           <label><small class="text-alert dismissable text-danger">Testing</small></label>

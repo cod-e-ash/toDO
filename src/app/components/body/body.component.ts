@@ -4,9 +4,8 @@ import { ToDoListService } from '../../services/todolist.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-// import * as $ from 'jquery';
+// import { CdkDragDrop  } from '@angular/cdk/drag-drop';
 import * as bootstrap from 'bootstrap';
-// declare var $ :any;
 
 @Component({
   selector: 'app-body',
@@ -96,7 +95,6 @@ export class BodyComponent implements OnInit, OnDestroy, AfterViewInit {
   updItemInList(listIndex= -1, listId= '', contentIndex) {
     if (listIndex > -1) {
         this.toDoListService.updListItem(listIndex, listId, contentIndex, this.myList[listIndex].content[contentIndex]);
-        // this.mySort(listIndex);
       }
   }
 
@@ -110,20 +108,20 @@ export class BodyComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addList() {
+    if (this.newListItem.length > 0) {
+      this.addItemInList();
+    }
     if (this.newList.title.length > 0 && this.newList.content.length > 0) {
       this.newList.user = this.curUser;
       this.toDoListService.addList(this.newList);
       this.newList = {_id: null, user: this.curUser, title: '', content: [], lastupd: new Date};
+      jQuery(this.newListModal.nativeElement).modal('hide');
     }
   }
 
   newListReset() {
     this.newList = {_id: null, user: this.curUser, title: '', content: [], lastupd: new Date};
-    // console.log(this.newListModal.nativeElement);
-    // $(this.newListModal.nativeElement).removeClass('show');
-    // $(this.newListModal.nativeElement).toggleClass('hide');
     jQuery(this.newListModal.nativeElement).modal('hide');
-    // $('#myModal').modal('hide');
   }
 
   setCurItem(listIndex, listId) {

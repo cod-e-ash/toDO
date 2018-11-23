@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {TimeAgoPipe} from 'time-ago-pipe';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+// import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +26,7 @@ import { AuthInterceptor } from './services/auth-interceptor.service';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule
+    // DragDropModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]

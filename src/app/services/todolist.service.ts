@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import { toDoList, toDoItem } from '../models/todolist.model';
 import { Subject } from 'rxjs';
 import { HttpClient} from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class ToDoListService {
 
   private commonList: toDoList[];
   private postUpdSubject = new Subject<toDoList[]>();
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
     getList() {
-        this.http.get<toDoList[]>('http://localhost:3000/api/lists')
+        this.http.get<toDoList[]>(this.apiUrl + '/lists')
         .subscribe((serverList) => {
             this.commonList = serverList;
             this.emitSubjectEvent();
@@ -20,14 +22,14 @@ export class ToDoListService {
     }
 
     addList(list: toDoList) {
-        this.http.post<{rspData: string}>('http://localhost:3000/api/lists', list)
+        this.http.post<{rspData: string}>(this.apiUrl + '/lists', list)
         .subscribe((rspData) => {
                 this.commonList.unshift(list);
         });
     }
 
     delList(listIndex, listId) {
-        this.http.delete('http://localhost:3000/api/lists/' + listId)
+        this.http.delete(this.apiUrl + '/lists/' + listId)
         .subscribe((rspData) => {
                 this.commonList.splice(listIndex, 1);
         });
@@ -35,7 +37,7 @@ export class ToDoListService {
 
     addListItem(listIndex, listId, newItem) {
         const newItemText = {text: newItem};
-        this.http.post<{message: string, newItem: toDoItem}>('http://localhost:3000/api/items/' + listId, newItemText)
+        this.http.post<{message: string, newItem: toDoItem}>(this.apiUrl + '/items/' + listId, newItemText)
         .subscribe((rspData) => {
                 if (rspData.message === 'success') {
                     this.commonList[listIndex].content.unshift(rspData.newItem);
@@ -45,7 +47,7 @@ export class ToDoListService {
     }
 
     updListItem(listIndex, listId, contentIndex, updItem) {
-        this.http.patch<{message: string}>('http://localhost:3000/api/items/' + listId, updItem)
+        this.http.patch<{message: string}>(this.apiUrl + '/items/' + listId, updItem)
         .subscribe((rspData) => {
                 if (rspData.message === 'success') {
                     this.commonList[listIndex].content[contentIndex] = updItem;
@@ -55,7 +57,7 @@ export class ToDoListService {
     }
 
     delListItem(listIndex, listId, contentIndex, contentId) {
-        this.http.delete<{message: string}>('http://localhost:3000/api/items/' + listId + '/' + contentId)
+        this.http.delete<{message: string}>(this.apiUrl + '/items/' + listId + '/' + contentId)
         .subscribe((rspData) => {
                 if (rspData.message === 'success') {
                     this.commonList[listIndex].content.splice(contentIndex, 1);

@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { UserDetails } from '../../../models/user.model';
 import { AuthDetail } from '../../../models/auth.model';
-import { invalid } from '@angular/compiler/src/render3/view/util';
 import { Router } from '@angular/router';
 
 @Component({

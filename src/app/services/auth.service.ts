@@ -5,6 +5,7 @@ import { AuthDetail } from '../models/auth.model';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private token: string;
     private userName: string;
     private curUserSubject = new Subject<string>();
+    private apiUrl = environment.apiUrl;
 
     constructor(private http: HttpClient, private router: Router) {}
 
@@ -24,7 +26,7 @@ export class AuthService {
        return this.http.post<{message: string,
         token: string,
         userName: string,
-        err: any}>('http://localhost:3000/api/users/signup', newUser)
+        err: any}>(this.apiUrl + '/users/signup', newUser)
         .pipe(map(rspData => {
             if (rspData.message === 'success') {
                 this.token = rspData.token;
@@ -43,7 +45,7 @@ export class AuthService {
             message: string,
             token: string,
             userName: string,
-            err: any}>('http://localhost:3000/api/users/login', authDetails)
+            err: any}>(this.apiUrl + '/users/login', authDetails)
         .pipe(map(rspData => {
             if (rspData.message === 'success') {
                 this.token = rspData.token;

@@ -10,9 +10,22 @@ listRouter.get('', checkAuth, (req, res, next) => {
   
   ToDoList.find({'user': req.headers.user}).sort({'lastupd':-1})
   .then(documents => {
-    res.json(documents);
+    res.status(200).json(documents);
+  })
+  .catch(ex => {
+    res.status(500).json({'message':'Internal Server Error!'});
   });
+});
 
+listRouter.get('/mylist', (req, res, next) => {
+  
+  ToDoList.find().sort({'lastupd':-1})
+  .then(documents => {
+    res.status(200).json(documents);
+  })
+  .catch(ex => {
+    res.status(500).json({'message':'Internal Server Error!'});
+  });
 });
 
 listRouter.post('', checkAuth, (req, res, next) => {
@@ -32,11 +45,13 @@ listRouter.post('', checkAuth, (req, res, next) => {
       content : req.body.content,
       lastupd: req.body.lastupd
     });
-    list.save();
-    res.status(201).json({
-      message: "List added successfully"
+    list.save()
+    .then(list => {
+      res.status(201).json({message: "List added successfully"});
+    })
+    .catch(ex => {
+      res.status(500).json({'message':'Internal Server Error!'});
     });
-  
   });
   
 listRouter.delete('/:id', checkAuth, (req, res, next) => {
@@ -44,6 +59,9 @@ listRouter.delete('/:id', checkAuth, (req, res, next) => {
     ToDoList.deleteOne({'_id': req.params.id, 'user': req.headers.user})
     .then(result => {
       res.status(200).json({message: 'List Deleted'});
+    })
+    .catch(ex => {
+      res.status(500).json({'message':'Internal Server Error!'});
     });
   
 });

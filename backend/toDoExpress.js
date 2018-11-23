@@ -12,7 +12,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
-mongoose.connect('mongodb+srv://invo:mongopass2@cluster0-zkcca.mongodb.net/todo')
+mongoose.connect('mongodb+srv://invo:' + process.env.MONGO_ATLAS_PW + '@cluster0-zkcca.mongodb.net/todo')
   .then(() => {
     console.log('Database Connected');
   })
