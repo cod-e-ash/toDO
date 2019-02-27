@@ -2,5 +2,5 @@ import { appInitializerFactory } from '@angular/platform-browser/src/browser/ser
 
 export const environment = {
   production: true,
-  apiUrl: 'http://todo-env.3kq9ajg3hd.us-east-2.elasticbeanstalk.com/api'
+  apiUrl: 'https://codeash-todo.herokuapp.com/api'
 };
