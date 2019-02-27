@@ -5,6 +5,8 @@
 /tmp
 /out-tsc
 
+/backend/ToDO/
+
 # dependencies
 /node_modules
 
