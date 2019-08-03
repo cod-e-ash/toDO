@@ -12,7 +12,7 @@ import * as bootstrap from 'bootstrap';
   templateUrl: './body.component.html',
   styleUrls: ['./body.component.css']
 })
-export class BodyComponent implements OnInit, OnDestroy, AfterViewInit {
+export class BodyComponent implements OnInit, OnDestroy {
 
   colors: string[] = ['primary', 'info', 'success', 'danger', 'warning', 'info'];
   myList: toDoList[];
@@ -26,7 +26,7 @@ export class BodyComponent implements OnInit, OnDestroy, AfterViewInit {
   isLoading = false;
   private getListSub: Subscription;
 
-  @ViewChild('newlistmodal') newListModal: ElementRef;
+  @ViewChild('newlistmodal', { static: false }) newListModal: ElementRef;
 
   constructor(public toDoListService: ToDoListService, public authService: AuthService, private router: Router) { }
 
@@ -134,9 +134,5 @@ export class BodyComponent implements OnInit, OnDestroy, AfterViewInit {
     this.curIndex = -1;
     this.curId = '';
   }
-
-  ngAfterViewInit() {
-  }
-
 
 }

@@ -47,6 +47,7 @@ export class AuthService {
             userName: string,
             err: any}>(this.apiUrl + '/users/login', authDetails)
         .pipe(map(rspData => {
+            console.log(rspData);
             if (rspData.message === 'success') {
                 this.token = rspData.token;
                 this.userName = rspData.userName;
